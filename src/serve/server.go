@@ -122,7 +122,7 @@ func SqlGets(w http.ResponseWriter, r *http.Request) {
 		clusers = append(clusers, Cluser{Account: account, Password: password})
 	}
 
-	rd := Td{Msg: "Request data ! lalalal", Code: 200, Data: clusers}
+	rd := Td{Msg: "Request data ! lalalal test jenkins", Code: 200, Data: clusers}
 	jsonuse, _ := json.Marshal(rd)
 	logger.Info("Get:" + string(jsonuse))
 	fmt.Fprintln(w, string(jsonuse))
