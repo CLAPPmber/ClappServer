@@ -28,6 +28,6 @@ func init() {
 		logger.Errorln("数据库启动失败：", err)
 
 	} else {
-		fmt.Println("数据库创建成功")
+		fmt.Println("数据库连接成功")
 	}
 }
