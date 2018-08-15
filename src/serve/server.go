@@ -219,20 +219,22 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 func Getallrec(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 	tx, err := Db.Begin()
+	var retrec []Retprorec
+	reterr := []Retprorec{{Chapter_num: 0, Chapter_rec: 0}}
 	if err != nil {
-		fb.SendErr(err, "获取记录失败")
+		fb.SendErr(err, "获取记录失败", reterr)
 		return
 	}
 	defer GetPanic(tx)
 	postdata, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fb.SendErr(err, "获取记录失败")
+		fb.SendErr(err, "获取记录失败", reterr)
 		return
 	}
 	var cluser Cluser
 	err = json.Unmarshal(postdata, &cluser)
 	if err != nil {
-		fb.SendErr(err, "获取记录失败")
+		fb.SendErr(err, "获取记录失败", reterr)
 		return
 	}
 	var clu Cluser
@@ -241,24 +243,23 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			tx.Rollback()
-			fb.SendStatus(501, "账号不存在")
+			fb.SendData(501, "账号不存在", reterr)
 			return
 		} else {
-			fb.SendErr(err, "查询账号错误")
+			fb.SendErr(err, "查询账号错误", reterr)
 			return
 		}
 	}
-	var retrec []Retprorec
 	rows, err := tx.Query("SELECT chapter_num ,COUNT(*) FROM pra_record WHERE account = $1 group by chapter_num", cluser.Account)
 	if err != nil {
-		fb.SendErr(err, "获取错误")
+		fb.SendErr(err, "获取错误", reterr)
 		return
 	}
 	for rows.Next() {
 		var cl Retprorec
 		err := rows.Scan(&cl.Chapter_num, &cl.Chapter_rec)
 		if err != nil {
-			fb.SendErr(err, "获取错误")
+			fb.SendErr(err, "获取错误", reterr)
 			return
 		}
 		retrec = append(retrec, cl)

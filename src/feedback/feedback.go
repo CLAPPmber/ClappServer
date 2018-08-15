@@ -35,10 +35,13 @@ func (fb *FeedBack) SendData(code int, msg string, data interface{}) error {
 }
 
 //SendErr send err
-func (fb *FeedBack) SendErr(err error, msg string) {
+func (fb *FeedBack) SendErr(err error, msg string, data ...interface{}) {
 	logger.Error("", err)
 	fb.Code = 505
 	fb.Msg = msg
+	if data != nil {
+		fb.Data = data
+	}
 	fb.SendTo()
 }
 
