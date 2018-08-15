@@ -3,8 +3,10 @@ package serve
 import (
 	"bytes"
 	"crypto/md5"
+	"database/sql"
 	. "db"
 	"encoding/json"
+	"feedback"
 	"fmt"
 	"html/template"
 	"io"
@@ -15,17 +17,6 @@ import (
 	"strconv"
 	"time"
 )
-
-type Cluser struct {
-	Account  string `json:"account"`
-	Password string `json:"password"`
-}
-
-type Td struct {
-	Msg  string      `json:"msg"`
-	Code int         `json:"code"`
-	Data interface{} `json:"data"`
-}
 
 //SayhelloName for test http
 func SayhelloName(w http.ResponseWriter, r *http.Request) {
@@ -121,11 +112,8 @@ func SqlGets(w http.ResponseWriter, r *http.Request) {
 		}
 		clusers = append(clusers, Cluser{Account: account, Password: password})
 	}
-
-	rd := Td{Msg: "Request data !  last test 2", Code: 200, Data: clusers}
-	jsonuse, _ := json.Marshal(rd)
-	logger.Info("Get:" + string(jsonuse))
-	fmt.Fprintln(w, string(jsonuse))
+	fb := feedback.NewFeedBack(w)
+	fb.SendData(200, "Request data !  last test 2", clusers)
 }
 
 func SqlGet(w http.ResponseWriter, r *http.Request) {
@@ -168,11 +156,121 @@ func TestPost(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			logger.Errorln(err)
 		}
-		rd := Td{Msg: "Post data", Code: 200, Data: at}
-		resp, err := json.Marshal(rd)
-		if err != nil {
-			logger.Errorln(err)
-		}
-		w.Write(resp)
+		fb := feedback.NewFeedBack(w)
+		fb.SendData(200, "Post data", at)
 	}
+}
+
+//提交做题记录
+func Prarecord(w http.ResponseWriter, r *http.Request) {
+	fb := feedback.NewFeedBack(w)
+	tx, err := Db.Begin()
+	if err != nil {
+		fb.SendErr(err, "提交记录失败")
+		return
+	}
+	defer GetPanic(tx)
+	postdata, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fb.SendErr(err, "提交记录失败")
+		return
+	}
+	var prarec prarecord
+	err = json.Unmarshal(postdata, &prarec)
+	if err != nil {
+		fb.SendErr(err, "提交记录失败")
+		return
+	}
+	var clu Cluser
+	err = tx.QueryRow("SELECT * from cluser where account = $1",
+		prarec.Account).Scan(&clu.Account, &clu.Password)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			tx.Rollback()
+			fb.SendStatus(501, "账号不存在")
+			return
+		} else {
+			fb.SendErr(err, "查询账号错误")
+			return
+		}
+	}
+
+	sqlStatement := `INSERT INTO pra_record(chapter_num,question_num,account) values($1,$2,$3)`
+	stmt, err := tx.Prepare(sqlStatement)
+	if err != nil {
+		fb.SendErr(err, "插入失败")
+	}
+	for _, onerec := range prarec.Record {
+		_, err = stmt.Exec(onerec.Chapter_num, onerec.Quesiont_num, prarec.Account)
+		if err != nil {
+			tx.Rollback()
+			fb.SendErr(err, "提交记录失败,记录可能已存在")
+			return
+		}
+	}
+	err = tx.Commit()
+	if err != nil {
+		fb.SendErr(err, "提交记录失败")
+		tx.Rollback()
+	}
+	fb.SendStatus(200, "提交记录成功")
+}
+
+func Getallrec(w http.ResponseWriter, r *http.Request) {
+	fb := feedback.NewFeedBack(w)
+	tx, err := Db.Begin()
+	if err != nil {
+		fb.SendErr(err, "获取记录失败")
+		return
+	}
+	defer GetPanic(tx)
+	postdata, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fb.SendErr(err, "获取记录失败")
+		return
+	}
+	var cluser Cluser
+	err = json.Unmarshal(postdata, &cluser)
+	if err != nil {
+		fb.SendErr(err, "获取记录失败")
+		return
+	}
+	var clu Cluser
+	err = tx.QueryRow("SELECT * from cluser where account = $1",
+		cluser.Account).Scan(&clu.Account, &clu.Password)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			tx.Rollback()
+			fb.SendStatus(501, "账号不存在")
+			return
+		} else {
+			fb.SendErr(err, "查询账号错误")
+			return
+		}
+	}
+	var retrec []Retprorec
+	rows, err := tx.Query("SELECT chapter_num ,COUNT(*) FROM pra_record WHERE account = $1 group by chapter_num", cluser.Account)
+	if err != nil {
+		fb.SendErr(err, "获取错误")
+		return
+	}
+	for rows.Next() {
+		var cl Retprorec
+		err := rows.Scan(&cl.Chapter_num, &cl.Chapter_rec)
+		if err != nil {
+			fb.SendErr(err, "获取错误")
+			return
+		}
+		retrec = append(retrec, cl)
+	}
+	fb.SendData(200, "成功获取记录", retrec)
+}
+
+//GetPanic Rollback tx
+func GetPanic(tx *sql.Tx) {
+	if p := recover(); p != nil {
+		tx.Rollback()
+
+	}
+
 }
