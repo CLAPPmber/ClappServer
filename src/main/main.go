@@ -23,7 +23,8 @@ func main() {
 	http.HandleFunc("/gsql", serve.SqlGet)
 	http.HandleFunc("/gsqls", serve.SqlGets)
 	http.HandleFunc("/testpost", serve.TestPost)
-	http.HandleFunc("/prarecord",serve.Prarecord)
+	http.HandleFunc("/prarecord", serve.Prarecord)
+	http.HandleFunc("/getallrec", serve.Getallrec)
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

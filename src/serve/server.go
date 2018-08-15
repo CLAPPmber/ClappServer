@@ -18,12 +18,6 @@ import (
 	"time"
 )
 
-type Td struct {
-	Msg  string      `json:"msg"`
-	Code int         `json:"code"`
-	Data interface{} `json:"data"`
-}
-
 //SayhelloName for test http
 func SayhelloName(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello astaxie!")
@@ -118,11 +112,8 @@ func SqlGets(w http.ResponseWriter, r *http.Request) {
 		}
 		clusers = append(clusers, Cluser{Account: account, Password: password})
 	}
-
-	rd := Td{Msg: "Request data !  last test 2", Code: 200, Data: clusers}
-	jsonuse, _ := json.Marshal(rd)
-	logger.Info("Get:" + string(jsonuse))
-	fmt.Fprintln(w, string(jsonuse))
+	fb := feedback.NewFeedBack(w)
+	fb.SendData(200, "Request data !  last test 2", clusers)
 }
 
 func SqlGet(w http.ResponseWriter, r *http.Request) {
@@ -165,12 +156,8 @@ func TestPost(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			logger.Errorln(err)
 		}
-		rd := Td{Msg: "Post data", Code: 200, Data: at}
-		resp, err := json.Marshal(rd)
-		if err != nil {
-			logger.Errorln(err)
-		}
-		w.Write(resp)
+		fb := feedback.NewFeedBack(w)
+		fb.SendData(200, "Post data", at)
 	}
 }
 
@@ -234,6 +221,7 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 	tx, err := Db.Begin()
 	if err != nil {
 		fb.SendErr(err, "获取记录失败")
+		return
 	}
 	defer GetPanic(tx)
 	postdata, err := ioutil.ReadAll(r.Body)
@@ -260,7 +248,22 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
+	var retrec []Retprorec
+	rows, err := tx.Query("SELECT chapter_num ,COUNT(*) FROM pra_record WHERE account = $1 group by chapter_num", cluser.Account)
+	if err != nil {
+		fb.SendErr(err, "获取错误")
+		return
+	}
+	for rows.Next() {
+		var cl Retprorec
+		err := rows.Scan(&cl.Chapter_num, &cl.Chapter_rec)
+		if err != nil {
+			fb.SendErr(err, "获取错误")
+			return
+		}
+		retrec = append(retrec, cl)
+	}
+	fb.SendData(200, "成功获取记录", retrec)
 }
 
 //GetPanic Rollback tx

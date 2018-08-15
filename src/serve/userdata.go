@@ -16,5 +16,6 @@ type Cluser struct {
 }
 
 type Retprorec struct {
-	Chapter_num int `json:""`
+	Chapter_num int `json:"chapter_num"`
+	Chapter_rec int `json:"chapter_rec"`
 }
