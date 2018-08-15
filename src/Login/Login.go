@@ -1,0 +1,59 @@
+package login
+
+import(
+	"feedback"
+	"logger"
+	. "db"
+	"fmt"
+	"io/ioutil"
+	"encoding/json"
+)
+
+func Login(data interface{})(bool,error){
+	sqlStatement := "SELECT * FROM ish2b WHERE account = $1 AND password = $2;"
+	stmt, err := db.Prepare(sqlStatement)
+	if err != nil {
+		logger.Errorln("Login失败",err)
+		return false,err
+	}
+	rows, err := stmt.Query(data)
+	defer rows.Close()
+	for rows.Next() {
+		rows.Scan(data)
+		return true, nil
+	}
+	logger.Errorln("无法查询",err)
+    return false,err
+}
+
+func LoginHandle(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin", "*") //设置跨域
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	var data interface{}
+	err = json.Unmarshal(result, &data)
+	if err != nil {
+		logger.Errorln("读取数据失败",err)
+		fb.SendData(501,"读取数据失败","null")
+		return
+	}
+	fmt.Println(data)
+	
+	result,err:= Login(data)
+	if err !=nil {
+		logger.Errorln("Login失败",err)
+		fb.SendData(501,"解析数据失败","null")
+		return
+	}
+
+	if result {
+		fb.SendData(200,"登录成功","null")
+		return
+	}else{
+		fb.SendData(501,"账号不存在","null")
+		return
+	}
+}
