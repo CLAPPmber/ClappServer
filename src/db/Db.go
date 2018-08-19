@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	//DbDriverName  = "postgres"
+	DbDriverName  = "postgres"
 	StartDatabase = "host=%s port=%d user=%s password=%s dbname=%s sslmode=disable"
 	Host          = "123.207.25.239"
 	Port          = 5432
