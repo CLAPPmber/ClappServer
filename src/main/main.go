@@ -5,6 +5,7 @@ import (
 	_ "db"
 	"log"
 	_ "logger"
+	"login"
 	_ "memory"
 	"net/http"
 	"serve"
@@ -25,6 +26,8 @@ func main() {
 	http.HandleFunc("/testpost", serve.TestPost)
 	http.HandleFunc("/prarecord", serve.Prarecord)
 	http.HandleFunc("/getallrec", serve.Getallrec)
+	http.HandleFunc("/login", login.LoginHandle)
+	http.HandleFunc("/register", login.RegisteredHandle)
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

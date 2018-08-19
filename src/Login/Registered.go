@@ -13,7 +13,7 @@ import (
 
 func CheckUser(data interface{}) (bool, error) {
 
-	account = data.account
+	//account = data.account
 
 	sqlStat := "SElECT from ish2b WHERE account = $1"
 	stmt, err := Db.Prepare(sqlStat)
@@ -24,7 +24,7 @@ func CheckUser(data interface{}) (bool, error) {
 		return false, err
 	}
 
-	rows, err := stmt.Query(account)
+	rows, err := stmt.Query(data)
 
 	if rows.Next() {
 		return true, nil
@@ -44,7 +44,7 @@ func Registered(data interface{}) (bool, error) {
 		return false, err
 	}
 
-	_, err := stmt.Exec(data)
+	_, err = stmt.Exec(data)
 	defer stmt.Close()
 
 	if err != nil {
@@ -63,7 +63,8 @@ func RegisteredHandle(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	fb := feedback.Newmessage(w)
+
+	fb := feedback.NewFeedBack(w)
 	detail, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		logger.Errorln("读取数据失败", err)
@@ -89,13 +90,13 @@ func RegisteredHandle(w http.ResponseWriter, r *http.Request) {
 		fb.SendData(503, "账号已存在", "null")
 		return
 	} else {
-		result, err = Registered(data)
+		ok, err := Registered(data)
 		if err != nil {
 			logger.Errorln("Registered失败", err)
 			fb.SendData(503, "注册失败", "null")
 			return
 		}
-		if result {
+		if ok {
 			fb.SendData(200, "注册成功", "null")
 			return
 		} else {
