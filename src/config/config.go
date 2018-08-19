@@ -23,7 +23,6 @@ func (Hu Human) String() string {
 
 //LoadConfig println fmt
 func LoadConfig() {
-	fmt.Println("LoadConfig......Hello World!")
 	logger.Debug("LoadConfig......Hello World!")
 	c := make(chan int, 1)
 	c <- 1
