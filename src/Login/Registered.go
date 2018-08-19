@@ -57,7 +57,6 @@ func Registered(data interface{}) (bool, error) {
 
 func RegisteredHandle(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Access-Control-Allow-Origin", "*") //设置跨域
 
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusNotFound)
