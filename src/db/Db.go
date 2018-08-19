@@ -23,7 +23,7 @@ var Db *sql.DB
 
 func init() {
 	psqlInit := fmt.Sprintf(StartDatabase, Host, Port, User, Password, Dbname)
-	Db, err = sql.Open(User, psqlInit)
+	Db, err = sql.Open(DbDriverName, psqlInit)
 	if err != nil {
 		logger.Errorln("数据库启动失败：", err)
 
