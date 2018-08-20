@@ -1,4 +1,4 @@
 .vscode
 bin
 pkg
-/src/main/logs
+/src/clap/main/logs

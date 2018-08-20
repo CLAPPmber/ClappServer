@@ -1,0 +1,157 @@
+2018-07-29 23:33:55 ERROR Db.go:29  数据库启动失败： sql: unknown driver "postgre" (forgotten import?)
+
+2018-07-29 23:39:51 ERROR server.go:106  Query err: dial tcp: lookup tcp/%!d(string=5432): getaddrinfow: The specified class was not found.
+
+2018-07-29 23:43:59 ERROR server.go:106  Query err: pq: no pg_hba.conf entry for host "202.192.81.26", user "ish2b", database "ish2b", SSL off
+
+2018-08-01 22:34:40 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-01 22:44:47 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-01 23:32:37 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-01 23:33:17 ERROR server.go:164  invalid character '"' after object key:value pair
+
+2018-08-01 23:34:13 ERROR server.go:164  invalid character '"' after object key:value pair
+
+2018-08-01 23:36:15 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-01 23:36:18 ERROR server.go:161  invalid character '"' after object key:value pair
+
+2018-08-01 23:38:17 INFO server.go:165  post request ,requestdata: {
+	"account":"clcl123",
+	"password":"123456",
+	"asdasd":123
+}
+
+2018-08-01 23:39:31 INFO server.go:165  post request ,requestdata: {"msg":"Request data","data":[{"account":"clcl123","password":"123456"}]}
+
+2018-08-01 23:39:57 INFO server.go:165  post request ,requestdata: {
+	"msg":"Request data",
+	"data":[
+		{
+			"account":"clcl123",
+			"password":"123456"
+			
+		}
+	]
+}
+
+2018-08-01 23:40:11 INFO server.go:165  post request ,requestdata: {
+	"msg":"Request data",
+	"data":[
+		{
+			"account":"clcl123",
+			"password":"123456"
+			
+		}
+	]
+}
+
+2018-08-01 23:40:42 INFO server.go:165  post request ,requestdata: {
+	"data":[
+		{
+			"account":"clcl123",
+			"password":"123456"
+			
+		}
+	],
+	"testint":123
+}
+
+2018-08-01 23:41:33 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-08 22:53:37 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 11:52:28 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 11:53:46 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456"},{"account":"adm2b","password":"1234561"}]}
+2018-08-15 14:07:43 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 14:09:14 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456"}]}
+2018-08-15 14:09:27 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:11:50 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 14:12:03 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456"},{"account":"adm2b","password":"1234561"}]}
+2018-08-15 14:12:58 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 14:13:42 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:24:23 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 14:24:29 ERROR server.go:111  Query err: pq: û���������� "183.236.0.94", �û� "ish2b", ���ݿ� "ish2b", SSL �ر� �� pg_hba.conf ��¼
+
+2018-08-15 14:26:44 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:19 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:20 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:21 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:21 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:21 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:21 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:21 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:21 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:33:21 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:34:36 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:34:37 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 14:35:04 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 14:35:11 ERROR server.go:111  Query err: pq: û���������� "183.236.0.94", �û� "ish2b", ���ݿ� "ish2b", SSL �ر� �� pg_hba.conf ��¼
+
+2018-08-15 14:36:37 INFO server.go:127 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"}]}
+2018-08-15 16:27:38 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:31:33 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:32:53 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:33:40 INFO server.go:129 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"},{"account":"userone","password":"123456"}]}
+2018-08-15 16:34:19 INFO server.go:129 Get:{"msg":"Request data !  last test 2","code":200,"data":[{"account":"admliang","password":"123456123"},{"account":"userone","password":"123456"},{"account":"usertwo","password":"3232323"}]}
+2018-08-15 16:40:43 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:44:13 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:45:42 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:47:56 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:48:43 INFO server.go:198  {
+    "account": "userone",
+    "record": [
+        {
+            "chapter_num": 1,
+            "question_num": 1
+        },
+        {
+            "chapter_num": 1,
+            "question_num": 2
+        }
+    ]
+}
+
+2018-08-15 16:51:14 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:56:57 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:57:55 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 16:59:16 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:01:33 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:02:35 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:03:44 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:07:05 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:09:26 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:09:37 ERROR feedback.go:39 %!(EXTRA *pq.Error=pq: 关系 "pra_record" 的 "quesiont_num" 字段不存在)
+2018-08-15 17:10:25 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:10:51 ERROR feedback.go:39 %!(EXTRA *pq.Error=pq: 重复键违反唯一约束"pra_record_pkey")
+2018-08-15 17:14:10 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:15:50 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:18:38 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:19:40 ERROR feedback.go:39 %!(EXTRA *pq.Error=pq: 重复键违反唯一约束"pra_record_pkey")
+2018-08-15 17:28:49 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:35:46 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:36:33 ERROR feedback.go:39 %!(EXTRA *json.SyntaxError=invalid character ']' looking for beginning of value)
+2018-08-15 17:37:52 ERROR feedback.go:39 %!(EXTRA *pq.Error=pq: 重复键违反唯一约束"pra_record_pkey")
+2018-08-15 17:38:28 ERROR feedback.go:39 %!(EXTRA *pq.Error=pq: 重复键违反唯一约束"pra_record_pkey")
+2018-08-15 17:38:51 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 17:38:54 ERROR feedback.go:39 %!(EXTRA *pq.Error=pq: 重复键违反唯一约束"pra_record_pkey")
+2018-08-15 18:10:19 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 19:38:02 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 19:38:37 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 19:39:50 ERROR server.go:253  Query err: pq: 操作符不存在: & integer
+
+2018-08-15 19:41:19 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 19:41:22 ERROR feedback.go:39 %!(EXTRA *pq.Error=pq: 没有参数 $1)
+2018-08-15 19:43:18 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 19:45:12 ERROR feedback.go:39 %!(EXTRA *json.SyntaxError=invalid character '}' looking for beginning of object key string)
+2018-08-15 22:24:16 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 22:30:31 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 22:38:59 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 23:07:14 ERROR Db.go:28  数据库启动失败： sql: unknown driver "ish2b" (forgotten import?)
+
+2018-08-15 23:07:14 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 23:09:35 ERROR Db.go:28  数据库启动失败： sql: unknown driver "ish2b" (forgotten import?)
+
+2018-08-15 23:09:35 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-15 23:11:44 ERROR Db.go:28  数据库启动失败： sql: unknown driver "ish2b" (forgotten import?)
+
+2018-08-15 23:11:44 DEBUG config.go:27 LoadConfig......Hello World!
+2018-08-20 11:19:00 INFO Db.go:31  数据库连接成功
+
+2018-08-20 11:19:00 DEBUG config.go:26 LoadConfig......Hello World!
