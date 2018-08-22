@@ -23,7 +23,7 @@ func SayhelloName(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello astaxie!")
 }
 
-//Login test
+//login test
 func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method:", r.Method) //获取请求的方法
 	sess := session.GlobalSessions.SessionStart(w, r)
