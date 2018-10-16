@@ -4,27 +4,36 @@ import (
 	. "clap/db"
 	"clap/feedback"
 	"clap/logger"
+	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
-func Login(data interface{}) (bool, error) {
-	sqlStatement := "SELECT * FROM ish2b WHERE account = $1 AND password = $2;"
+type UserInfo struct {
+	Account  string `json:"account"`
+	Password string `json:"password"`
+}
+
+func Login(userInfo UserInfo) (bool, string) {
+	sqlStatement := "SELECT account FROM cluser WHERE account = $1 AND password = $2;"
 	stmt, err := Db.Prepare(sqlStatement)
 	if err != nil {
-		logger.Errorln("Login失败", err)
-		return false, err
+		logger.Errorln("查询出错", err)
+		return false, "查询出错"
 	}
-	rows, err := stmt.Query(data)
-	defer rows.Close()
-	for rows.Next() {
-		rows.Scan(data)
-		return true, nil
+	var account string
+	err = stmt.QueryRow(userInfo.Account, userInfo.Password).Scan(&account)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			logger.Errorln("账号不存在", err)
+			return false, "账号不存在"
+		} else {
+			logger.Errorln("查询出错", err)
+			return false, "查询出错"
+		}
 	}
-	logger.Errorln("无法查询", err)
-	return false, err
+	return true, ""
 }
 
 func LoginHandle(w http.ResponseWriter, r *http.Request) {
@@ -40,27 +49,20 @@ func LoginHandle(w http.ResponseWriter, r *http.Request) {
 		logger.Errorln("ioutil失败", err)
 
 	}
-	var data interface{}
-	err = json.Unmarshal(result, &data)
+	var userInfo UserInfo
+	err = json.Unmarshal(result, &userInfo)
 	if err != nil {
 		logger.Errorln("读取数据失败", err)
 		fb.SendData(501, "读取数据失败", "null")
 		return
 	}
-	fmt.Println(data)
 
-	ok, err := Login(data)
-	if err != nil {
-		logger.Errorln("Login失败", err)
-		fb.SendData(501, "解析数据失败", "null")
-		return
-	}
-
+	ok, msg := Login(userInfo)
 	if ok {
 		fb.SendData(200, "登录成功", "null")
 		return
 	} else {
-		fb.SendData(501, "账号不存在", "null")
+		fb.SendData(501, msg, "null")
 		return
 	}
 }
