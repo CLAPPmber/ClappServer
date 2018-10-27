@@ -4,17 +4,15 @@ import (
 	"bytes"
 	. "clap/db"
 	"clap/feedback"
+	"clap/logger"
 	"clap/session"
-	"crypto/md5"
+	. "clap/login"
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io"
 	"io/ioutil"
-	"clap/logger"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -23,42 +21,7 @@ func SayhelloName(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello astaxie!")
 }
 
-//login test
-func Login(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method:", r.Method) //获取请求的方法
-	sess := session.GlobalSessions.SessionStart(w, r)
-	if r.Method == "GET" {
-		crutime := time.Now().Unix()
-		h := md5.New()
-		io.WriteString(h, strconv.FormatInt(crutime, 10))
-		token := fmt.Sprintf("%x", h.Sum(nil))
-		t, err := template.ParseFiles("login.html")
-		if err != nil {
-			fmt.Println(err)
-		}
-		t.Execute(w, token)
-		w.Header().Set("Content-type", "text/html")
 
-	} else {
-		//请求的是登陆数据，那么执行登陆的逻辑判断
-		err := r.ParseForm()
-		if err != nil {
-			fmt.Println(err)
-		}
-		token := r.Form.Get("token")
-		if token != "" {
-			//验证token的合法性
-		} else {
-			//不存在token报错
-		}
-		fmt.Println("username length:", len(r.Form["username"][0]))
-		fmt.Println("username:", template.HTMLEscapeString(r.Form.Get("username"))) //输出到服务器端
-		fmt.Println("password:", template.HTMLEscapeString(r.Form.Get("password")))
-		template.HTMLEscape(w, []byte(r.Form.Get("username"))) //输出到客户端
-		sess.Set("username", r.Form["username"])
-		http.Redirect(w, r, "/", 302)
-	}
-}
 
 //count ???
 func count(w http.ResponseWriter, r *http.Request) {
@@ -265,6 +228,56 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 		retrec = append(retrec, cl)
 	}
 	fb.SendData(200, "成功获取记录", retrec)
+}
+
+//修改密码
+func ChangePassword(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	fb := feedback.NewFeedBack(w)
+
+	result, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		logger.Errorln("ioutil失败", err)
+
+	}
+	var userInfo UserInfo
+	err = json.Unmarshal(result, &userInfo)
+	if err != nil {
+		logger.Errorln("读取数据失败", err)
+		fb.SendData(501, "读取数据失败", "null")
+		return
+	}
+
+	if userInfo.Account == "" {
+		fb.SendData(502,"账号不能为空","null")
+		return
+	}
+
+	if userInfo.Password == "" {
+		fb.SendData(503,"密码不能为空","null")
+		return
+	}
+
+	sqlState := "UPDATE cluser SET password = $1 WHERE account = $2;"
+	stmt , err := Db.Prepare(sqlState)
+	if err!=nil {
+		logger.Errorln("获取更新stmt失败",err)
+		fb.SendStatus(502,"获取更新stmt失败")
+		return
+	}
+
+	_,err = stmt.Exec(userInfo.Password,userInfo.Account)
+	if err!=nil {
+		logger.Errorln("修改密码Exec失败")
+		fb.SendStatus(502,"修改密码失败")
+		return
+	}
+	fb.SendStatus(200,"修改密码成功")
 }
 
 //GetPanic Rollback tx
