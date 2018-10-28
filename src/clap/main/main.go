@@ -28,6 +28,7 @@ func main() {
 	http.HandleFunc("/login", login.LoginHandle)
 	http.HandleFunc("/register", login.RegisteredHandle)
 	http.HandleFunc("/changepassword",serve.ChangePassword)
+	http.HandleFunc("/clearrecord",serve.ClearRecord)
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

@@ -280,6 +280,26 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	fb.SendStatus(200,"修改密码成功")
 }
 
+func ClearRecord(w http.ResponseWriter, r *http.Request){
+	fb := feedback.NewFeedBack(w)
+	sqlstmt:="DELETE FROM pra_record where account = 'userone'"
+	stmt,err := Db.Prepare(sqlstmt)
+	if err!=nil {
+		logger.Errorln("获取stmt失败",err)
+		fb.SendData(501,"清楚记录失败",nil)
+		return
+	}
+
+	_,err = stmt.Exec()
+	if err!=nil {
+		logger.Errorln("清楚记录失败")
+		fb.SendData(500,"清楚记录失败",nil)
+		return
+	}
+	fb.SendData(200,"userone记录已清除",nil)
+}
+
+
 //GetPanic Rollback tx
 func GetPanic(tx *sql.Tx) {
 	if p := recover(); p != nil {
