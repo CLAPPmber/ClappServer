@@ -304,7 +304,7 @@ func ClearRecord(w http.ResponseWriter, Account string) error {
 func Clear(w http.ResponseWriter, r *http.Request){
 	fmt.Println("method:", r.Method) //获取请求的方法
 	if r.Method == "GET" {
-		t, err := template.ParseFiles("clap/main/login.html")
+		t, err := template.ParseFiles("login.html")
 		if err != nil {
 			logger.Errorln(err)
 			fmt.Println(err)
