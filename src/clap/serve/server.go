@@ -306,6 +306,7 @@ func Clear(w http.ResponseWriter, r *http.Request){
 	if r.Method == "GET" {
 		t, err := template.ParseFiles("ClappServer/src/clap/main/login.html")
 		if err != nil {
+			logger.Errorln(err)
 			fmt.Println(err)
 		}
 		t.Execute(w, nil)
@@ -315,16 +316,19 @@ func Clear(w http.ResponseWriter, r *http.Request){
 		//请求的是登陆数据，那么执行登陆的逻辑判断
 		err := r.ParseForm()
 		if err != nil {
+			logger.Errorln(err)
 			fmt.Println(err)
 		}
 		userName := template.HTMLEscapeString(r.Form.Get("username"))
 		fmt.Println("username:", template.HTMLEscapeString(r.Form.Get("username"))) //输出到服务器端
 		fmt.Println("username:", userName) //输出到服务器端
 		if userName == ""{
+			logger.Errorln("账号为空")
 			template.HTMLEscape(w,[]byte("不能为空"))
 		}
 		err = ClearRecord(w,userName)
 		if err!=nil{
+			logger.Errorln(err)
 			template.HTMLEscape(w,[]byte("清除失败"))
 			return
 		}
