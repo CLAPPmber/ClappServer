@@ -5,8 +5,8 @@ import (
 	. "clap/db"
 	"clap/feedback"
 	"clap/logger"
-	"clap/session"
 	. "clap/login"
+	"clap/session"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -14,14 +14,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+	"errors"
 )
 
 //SayhelloName for test http
 func SayhelloName(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello astaxie!")
 }
-
-
 
 //count ???
 func count(w http.ResponseWriter, r *http.Request) {
@@ -254,49 +253,84 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if userInfo.Account == "" {
-		fb.SendData(502,"账号不能为空","null")
+		fb.SendData(502, "账号不能为空", "null")
 		return
 	}
 
 	if userInfo.Password == "" {
-		fb.SendData(503,"密码不能为空","null")
+		fb.SendData(503, "密码不能为空", "null")
 		return
 	}
 
 	sqlState := "UPDATE cluser SET password = $1 WHERE account = $2;"
-	stmt , err := Db.Prepare(sqlState)
-	if err!=nil {
-		logger.Errorln("获取更新stmt失败",err)
-		fb.SendStatus(502,"获取更新stmt失败")
+	stmt, err := Db.Prepare(sqlState)
+	if err != nil {
+		logger.Errorln("获取更新stmt失败", err)
+		fb.SendStatus(502, "获取更新stmt失败")
 		return
 	}
 
-	_,err = stmt.Exec(userInfo.Password,userInfo.Account)
-	if err!=nil {
+	_, err = stmt.Exec(userInfo.Password, userInfo.Account)
+	if err != nil {
 		logger.Errorln("修改密码Exec失败")
-		fb.SendStatus(502,"修改密码失败")
+		fb.SendStatus(502, "修改密码失败")
 		return
 	}
-	fb.SendStatus(200,"修改密码成功")
+	fb.SendStatus(200, "修改密码成功")
 }
 
-func ClearRecord(w http.ResponseWriter, r *http.Request){
+func ClearRecord(w http.ResponseWriter, Account string) error {
+	if Account == "" {
+		return  errors.New("账号为空")
+	}
 	fb := feedback.NewFeedBack(w)
-	sqlstmt:="DELETE FROM pra_record where account = 'userone'"
-	stmt,err := Db.Prepare(sqlstmt)
-	if err!=nil {
-		logger.Errorln("获取stmt失败",err)
-		fb.SendData(501,"清楚记录失败",nil)
-		return
+	sqlstmt := "DELETE FROM pra_record where account = $1"
+	stmt, err := Db.Prepare(sqlstmt)
+	if err != nil {
+		logger.Errorln("获取stmt失败", err)
+		fb.SendData(501, "清楚记录失败", nil)
+		return err
 	}
 
-	_,err = stmt.Exec()
-	if err!=nil {
+	_, err = stmt.Exec(Account)
+	if err != nil {
 		logger.Errorln("清楚记录失败")
-		fb.SendData(500,"清楚记录失败",nil)
-		return
+		fb.SendData(500, "清楚记录失败", nil)
+		return err
 	}
-	fb.SendData(200,"userone记录已清除",nil)
+	return nil
+}
+
+func Clear(w http.ResponseWriter, r *http.Request){
+	fmt.Println("method:", r.Method) //获取请求的方法
+	if r.Method == "GET" {
+		t, err := template.ParseFiles("ClappServer/src/clap/main/login.html")
+		if err != nil {
+			fmt.Println(err)
+		}
+		t.Execute(w, nil)
+		w.Header().Set("Content-type", "text/html")
+
+	} else {
+		//请求的是登陆数据，那么执行登陆的逻辑判断
+		err := r.ParseForm()
+		if err != nil {
+			fmt.Println(err)
+		}
+		userName := template.HTMLEscapeString(r.Form.Get("username"))
+		fmt.Println("username:", template.HTMLEscapeString(r.Form.Get("username"))) //输出到服务器端
+		fmt.Println("username:", userName) //输出到服务器端
+		if userName == ""{
+			template.HTMLEscape(w,[]byte("不能为空"))
+		}
+		err = ClearRecord(w,userName)
+		if err!=nil{
+			template.HTMLEscape(w,[]byte("清除失败"))
+			return
+		}
+		template.HTMLEscape(w, []byte(r.Form.Get("username")+"记录清楚成功")) //输出到客户端
+	http.Redirect(w, r, "/", 302)
+}
 }
 
 

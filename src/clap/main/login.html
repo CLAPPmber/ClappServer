@@ -3,15 +3,14 @@
 </head>
 <body>
     <div id = "login"> 
-        <form action="http://127.0.0.1:9090/login" method="post">
-            <input type="checkbox" name="interest" value="football">足球
-            <input type="checkbox" name="interest" value="basketball">篮球
-            <input type="checkbox" name="interest" value="tennis">网球    
-            用户名:<input type="text" name="username">
-            密码:<input type="password" name="password">
+        <form action="http://127.0.0.1:9090/clearrecord" method="post">
+            输入账号:<input type="text" name="username">
             <input type="hidden" name="token" value="{{.}}">
-            <input type="submit" value="登陆">
+            <input type="submit" value="清楚记录">
        </form>
+
+
+
     </div>
 </body>
 </html>
