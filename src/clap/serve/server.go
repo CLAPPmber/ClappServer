@@ -60,6 +60,7 @@ func Count(w http.ResponseWriter, r *http.Request) {
 func SqlGets(w http.ResponseWriter, r *http.Request) {
 	var clusers []Cluser
 	rows, err := Db.Query("select * from cluser")
+	defer rows.Close()
 	if err != nil {
 		logger.Errorln("Query err:", err)
 		return
@@ -81,6 +82,7 @@ func SqlGets(w http.ResponseWriter, r *http.Request) {
 func SqlGet(w http.ResponseWriter, r *http.Request) {
 	var cluser Cluser
 	rows, err := Db.Query("select * from cluser")
+	defer rows.Close()
 	if err != nil {
 		logger.Errorln("Query err:", err)
 		return
@@ -159,6 +161,7 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 
 	sqlStatement := `INSERT INTO pra_record(chapter_num,question_num,account) values($1,$2,$3)`
 	stmt, err := tx.Prepare(sqlStatement)
+	defer stmt.Close()
 	if err != nil {
 		fb.SendErr(err, "插入失败")
 	}
@@ -213,6 +216,7 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	rows, err := tx.Query("SELECT chapter_num ,COUNT(*) FROM pra_record WHERE account = $1 group by chapter_num", cluser.Account)
+	defer rows.Close()
 	if err != nil {
 		fb.SendErr(err, "获取错误", reterr)
 		return
@@ -264,6 +268,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 
 	sqlState := "UPDATE cluser SET password = $1 WHERE account = $2;"
 	stmt, err := Db.Prepare(sqlState)
+	defer stmt.Close()
 	if err != nil {
 		logger.Errorln("获取更新stmt失败", err)
 		fb.SendStatus(502, "获取更新stmt失败")
@@ -286,6 +291,7 @@ func ClearRecord(w http.ResponseWriter, Account string) error {
 	fb := feedback.NewFeedBack(w)
 	sqlstmt := "DELETE FROM pra_record where account = $1"
 	stmt, err := Db.Prepare(sqlstmt)
+	defer stmt.Close()
 	if err != nil {
 		logger.Errorln("获取stmt失败", err)
 		fb.SendData(501, "清楚记录失败", nil)

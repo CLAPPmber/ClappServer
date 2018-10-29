@@ -29,5 +29,6 @@ func init() {
 
 	} else {
 		logger.Infoln("数据库连接成功")
+		fmt.Println("数据库连接成功")
 	}
 }
