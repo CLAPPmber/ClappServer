@@ -130,18 +130,21 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 	tx, err := Db.Begin()
 	if err != nil {
+		logger.Errorln(err,"提交记录失败")
 		fb.SendErr(err, "提交记录失败")
 		return
 	}
 	defer GetPanic(tx)
 	postdata, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		logger.Errorln(err,"提交记录失败")
 		fb.SendErr(err, "提交记录失败")
 		return
 	}
 	var prarec prarecord
 	err = json.Unmarshal(postdata, &prarec)
 	if err != nil {
+		logger.Errorln(err,"提交记录失败")
 		fb.SendErr(err, "提交记录失败")
 		return
 	}
@@ -151,9 +154,11 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			tx.Rollback()
+			logger.Errorln(err,"账号不存在")
 			fb.SendStatus(501, "账号不存在")
 			return
 		} else {
+			logger.Errorln(err,"查询账号错误")
 			fb.SendErr(err, "查询账号错误")
 			return
 		}
@@ -163,21 +168,25 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 	stmt, err := tx.Prepare(sqlStatement)
 	defer stmt.Close()
 	if err != nil {
+		logger.Errorln(err,"插入失败")
 		fb.SendErr(err, "插入失败")
 	}
 	for _, onerec := range prarec.Record {
 		_, err = stmt.Exec(onerec.Chapter_num, onerec.Quesiont_num, prarec.Account)
 		if err != nil {
 			tx.Rollback()
+			logger.Errorln(err,"提交记录失败,记录可能已存在")
 			fb.SendErr(err, "提交记录失败,记录可能已存在")
 			return
 		}
 	}
 	err = tx.Commit()
 	if err != nil {
+		logger.Errorln(err,"提交记录失败")
 		fb.SendErr(err, "提交记录失败")
 		tx.Rollback()
 	}
+	logger.Info("提交记录失败")
 	fb.SendStatus(200, "提交记录成功")
 }
 
@@ -187,18 +196,21 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 	var retrec []Retprorec
 	reterr := []Retprorec{{Chapter_num: 0, Chapter_rec: 0}}
 	if err != nil {
+		logger.Errorln(err,"获取记录失败")
 		fb.SendErr(err, "获取记录失败", reterr)
 		return
 	}
 	defer GetPanic(tx)
 	postdata, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		logger.Errorln(err,"获取记录失败")
 		fb.SendErr(err, "获取记录失败", reterr)
 		return
 	}
 	var cluser Cluser
 	err = json.Unmarshal(postdata, &cluser)
 	if err != nil {
+		logger.Errorln(err,"获取记录失败")
 		fb.SendErr(err, "获取记录失败", reterr)
 		return
 	}
@@ -208,9 +220,11 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			tx.Rollback()
+			logger.Errorln(err,"账号不存在")
 			fb.SendData(501, "账号不存在", reterr)
 			return
 		} else {
+			logger.Errorln(err,"查询账号错误")
 			fb.SendErr(err, "查询账号错误", reterr)
 			return
 		}
@@ -218,6 +232,7 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 	rows, err := tx.Query("SELECT chapter_num ,COUNT(*) FROM pra_record WHERE account = $1 group by chapter_num", cluser.Account)
 	defer rows.Close()
 	if err != nil {
+		logger.Errorln(err,"获取错误")
 		fb.SendErr(err, "获取错误", reterr)
 		return
 	}
@@ -225,11 +240,13 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 		var cl Retprorec
 		err := rows.Scan(&cl.Chapter_num, &cl.Chapter_rec)
 		if err != nil {
+			logger.Errorln(err,"获取错误")
 			fb.SendErr(err, "获取错误", reterr)
 			return
 		}
 		retrec = append(retrec, cl)
 	}
+	logger.Info("成功获取记录")
 	fb.SendData(200, "成功获取记录", retrec)
 }
 
@@ -246,7 +263,6 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	result, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		logger.Errorln("ioutil失败", err)
-
 	}
 	var userInfo UserInfo
 	err = json.Unmarshal(result, &userInfo)
