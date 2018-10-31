@@ -76,6 +76,7 @@ func SqlGets(w http.ResponseWriter, r *http.Request) {
 		clusers = append(clusers, Cluser{Account: account, Password: password})
 	}
 	fb := feedback.NewFeedBack(w)
+	logger.Infoln("调用SqlGets")
 	fb.SendData(200, "Request data !  last test 2", clusers)
 }
 
@@ -98,6 +99,7 @@ func SqlGet(w http.ResponseWriter, r *http.Request) {
 		cluser = Cluser{Account: account, Password: password}
 	}
 	jsonuse, _ := json.Marshal(cluser)
+	logger.Infoln("调用SqlGets")
 	fmt.Fprintln(w, string(jsonuse))
 }
 
@@ -130,30 +132,32 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 	tx, err := Db.Begin()
 	if err != nil {
-		logger.Errorln(err,"提交记录失败")
-		fb.SendErr(err, "提交记录失败")
+		logger.Errorln(err,"tx.begin Fail")
+		fb.SendErr(err, "tx.begin Fail")
 		return
 	}
 	defer GetPanic(tx)
 	postdata, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		logger.Errorln(err,"提交记录失败")
-		fb.SendErr(err, "提交记录失败")
+		tx.Rollback()
+		logger.Errorln(err,"ioutil.ReadAll Fail")
+		fb.SendErr(err, "ioutil.ReadAll Fail")
 		return
 	}
 	var prarec prarecord
 	err = json.Unmarshal(postdata, &prarec)
 	if err != nil {
-		logger.Errorln(err,"提交记录失败")
-		fb.SendErr(err, "提交记录失败")
+		tx.Rollback()
+		logger.Errorln(err,"Unmarshal Fail")
+		fb.SendErr(err, "Unmarshal Fail")
 		return
 	}
 	var clu Cluser
 	err = tx.QueryRow("SELECT * from cluser where account = $1",
 		prarec.Account).Scan(&clu.Account, &clu.Password)
 	if err != nil {
+		tx.Rollback()
 		if err == sql.ErrNoRows {
-			tx.Rollback()
 			logger.Errorln(err,"账号不存在")
 			fb.SendStatus(501, "账号不存在")
 			return
@@ -168,6 +172,7 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 	stmt, err := tx.Prepare(sqlStatement)
 	defer stmt.Close()
 	if err != nil {
+		tx.Rollback()
 		logger.Errorln(err,"插入失败")
 		fb.SendErr(err, "插入失败")
 	}
@@ -186,7 +191,7 @@ func Prarecord(w http.ResponseWriter, r *http.Request) {
 		fb.SendErr(err, "提交记录失败")
 		tx.Rollback()
 	}
-	logger.Info("提交记录失败")
+	logger.Infoln("提交记录成功")
 	fb.SendStatus(200, "提交记录成功")
 }
 
@@ -246,7 +251,7 @@ func Getallrec(w http.ResponseWriter, r *http.Request) {
 		}
 		retrec = append(retrec, cl)
 	}
-	logger.Info("成功获取记录")
+	logger.Infoln("成功获取记录")
 	fb.SendData(200, "成功获取记录", retrec)
 }
 
@@ -297,6 +302,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 		fb.SendStatus(502, "修改密码失败")
 		return
 	}
+	logger.Infoln("修改密码成功")
 	fb.SendStatus(200, "修改密码成功")
 }
 
@@ -310,16 +316,17 @@ func ClearRecord(w http.ResponseWriter, Account string) error {
 	defer stmt.Close()
 	if err != nil {
 		logger.Errorln("获取stmt失败", err)
-		fb.SendData(501, "清楚记录失败", nil)
+		fb.SendData(501, "清除记录失败", nil)
 		return err
 	}
 
 	_, err = stmt.Exec(Account)
 	if err != nil {
-		logger.Errorln("清楚记录失败")
-		fb.SendData(500, "清楚记录失败", nil)
+		logger.Errorln("清除记录失败")
+		fb.SendData(500, "清除记录失败", nil)
 		return err
 	}
+	logger.Infoln("清除了记录")
 	return nil
 }
 
