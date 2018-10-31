@@ -11,21 +11,21 @@ import (
 	//"database/sql"
 )
 
-func CheckUser(data interface{}) (bool, error) {
+func CheckUser(data UserInfo) (bool, error) {
 
 	//account = data.account
 
-	sqlStat := "SElECT from ish2b WHERE account = $1"
+	sqlStat := "SElECT from cluser WHERE account = $1"
 	stmt, err := Db.Prepare(sqlStat)
-
+	defer stmt.Close()
 	if err != nil {
 		//fmt.Println("数据库语句准备失败")
 		logger.Errorln("数据库语句准备失败", err)
 		return false, err
 	}
 
-	rows, err := stmt.Query(data)
-
+	rows, err := stmt.Query(data.Account)
+	defer rows.Close()
 	if rows.Next() {
 		return true, nil
 	}
@@ -33,10 +33,10 @@ func CheckUser(data interface{}) (bool, error) {
 	return false, nil
 
 }
+var userInfo UserInfo
+func Registered(data UserInfo) (bool, error) {
 
-func Registered(data interface{}) (bool, error) {
-
-	sqlStatement := "INSERT INTO ish2b(account, password) VALUES ($1, $2);"
+	sqlStatement := "INSERT INTO cluser(account, password) VALUES ($1, $2);"
 	stmt, err := Db.Prepare(sqlStatement)
 
 	if err != nil {
@@ -44,7 +44,7 @@ func Registered(data interface{}) (bool, error) {
 		return false, err
 	}
 
-	_, err = stmt.Exec(data)
+	_, err = stmt.Exec(data.Account,data.Password)
 	defer stmt.Close()
 
 	if err != nil {
@@ -70,37 +70,39 @@ func RegisteredHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var data interface{}
+	var data UserInfo
 	err = json.Unmarshal(detail, &data)
 	if err != nil {
 		logger.Errorln("解析数据失败", err)
-		fb.SendData(503, "解析数据失败", "null")
-		return
-	}
-	exist, err := CheckUser(data)
-	if err != nil {
-		logger.Errorln("CheckUser失败", err)
-		fb.SendData(503, "解析数据失败", "null")
+		fb.SendData(503, "解析数据失败", "")
 		return
 	}
 
+	exist, err := CheckUser(data)
+	if err != nil {
+		logger.Errorln("CheckUser失败", err)
+		fb.SendData(503, "解析数据失败", "")
+		return
+	}
 	if exist {
-		fb.SendData(503, "账号已存在", "null")
+		logger.Errorln("账号已存在", nil)
+		fb.SendData(503, "账号已存在", "")
+		return
+	}
+
+	ok, err := Registered(data)
+	if err != nil {
+		logger.Errorln("Registered失败", err)
+		fb.SendData(503, "注册失败", "")
+		return
+	}
+	if ok {
+		fb.SendData(200, "注册成功", "")
 		return
 	} else {
-		ok, err := Registered(data)
-		if err != nil {
-			logger.Errorln("Registered失败", err)
-			fb.SendData(503, "注册失败", "null")
-			return
-		}
-		if ok {
-			fb.SendData(200, "注册成功", "null")
-			return
-		} else {
-			logger.Errorln("result失败", err)
-			fb.SendData(503, "注册失败", "null")
-			return
-		}
+		logger.Errorln("result失败", err)
+		fb.SendData(503, "注册失败", "")
+		return
 	}
+
 }

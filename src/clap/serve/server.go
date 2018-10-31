@@ -264,7 +264,6 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fb := feedback.NewFeedBack(w)
-
 	result, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		logger.Errorln("ioutil失败", err)
