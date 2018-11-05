@@ -1,8 +1,6 @@
 package config
 
 import (
-	"clap/logger"
-	"fmt"
 	"strconv"
 )
 
@@ -22,12 +20,6 @@ func (Hu Human) String() string {
 }
 
 //LoadConfig println fmt
-func LoadConfig() {
-	logger.Infoln("LoadConfig......Hello World!!")
-	c := make(chan int, 1)
-	c <- 1
-	fmt.Println(<-c)
-}
 
 func sum(a []int, c chan int) {
 	sum := 0

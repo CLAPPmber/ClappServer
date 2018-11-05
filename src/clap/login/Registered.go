@@ -1,10 +1,9 @@
 package login
 
 import (
-	//"APPtable"
 	. "clap/db"
 	"clap/feedback"
-	"clap/logger"
+	."clap/TBLogger"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -20,7 +19,7 @@ func CheckUser(data UserInfo) (bool, error) {
 	defer stmt.Close()
 	if err != nil {
 		//fmt.Println("数据库语句准备失败")
-		logger.Errorln("数据库语句准备失败", err)
+		TbLogger.Error("数据库语句准备失败", err)
 		return false, err
 	}
 
@@ -40,7 +39,7 @@ func Registered(data UserInfo) (bool, error) {
 	stmt, err := Db.Prepare(sqlStatement)
 
 	if err != nil {
-		logger.Errorln("插入数据语句准备失败", err)
+		TbLogger.Error("插入数据语句准备失败", err)
 		return false, err
 	}
 
@@ -48,7 +47,7 @@ func Registered(data UserInfo) (bool, error) {
 	defer stmt.Close()
 
 	if err != nil {
-		logger.Errorln("插入数据失败", err)
+		TbLogger.Error("插入数据失败", err)
 		return false, err
 	}
 
@@ -65,7 +64,7 @@ func RegisteredHandle(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 	detail, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		logger.Errorln("读取数据失败", err)
+		TbLogger.Error("读取数据失败", err)
 		fb.SendData(503, "读取数据失败", "null")
 		return
 	}
@@ -73,26 +72,26 @@ func RegisteredHandle(w http.ResponseWriter, r *http.Request) {
 	var data UserInfo
 	err = json.Unmarshal(detail, &data)
 	if err != nil {
-		logger.Errorln("解析数据失败", err)
+		TbLogger.Error("解析数据失败", err)
 		fb.SendData(503, "解析数据失败", "")
 		return
 	}
 
 	exist, err := CheckUser(data)
 	if err != nil {
-		logger.Errorln("CheckUser失败", err)
+		TbLogger.Error("CheckUser失败", err)
 		fb.SendData(503, "解析数据失败", "")
 		return
 	}
 	if exist {
-		logger.Errorln("账号已存在", nil)
+		TbLogger.Error("账号已存在", nil)
 		fb.SendData(503, "账号已存在", "")
 		return
 	}
 
 	ok, err := Registered(data)
 	if err != nil {
-		logger.Errorln("Registered失败", err)
+		TbLogger.Error("Registered失败", err)
 		fb.SendData(503, "注册失败", "")
 		return
 	}
@@ -100,7 +99,7 @@ func RegisteredHandle(w http.ResponseWriter, r *http.Request) {
 		fb.SendData(200, "注册成功", "")
 		return
 	} else {
-		logger.Errorln("result失败", err)
+		TbLogger.Error("result失败", err)
 		fb.SendData(503, "注册失败", "")
 		return
 	}

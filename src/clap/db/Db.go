@@ -1,10 +1,8 @@
 package db
 
 import (
-	"clap/logger"
 	"database/sql"
 	"fmt"
-
 	_ "github.com/lib/pq"
 )
 
@@ -25,10 +23,8 @@ func init() {
 	psqlInit := fmt.Sprintf(StartDatabase, Host, Port, User, Password, Dbname)
 	Db, err = sql.Open(DbDriverName, psqlInit)
 	if err != nil {
-		logger.Errorln("数据库启动失败：", err)
-
+		panic("数据库启动失败："+err.Error())
 	} else {
-		logger.Infoln("数据库连接成功")
-		fmt.Println("数据库连接成功")
+		fmt.Println("创建数据库成功")
 	}
 }

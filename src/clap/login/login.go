@@ -3,7 +3,7 @@ package login
 import (
 	. "clap/db"
 	"clap/feedback"
-	"clap/logger"
+	."clap/TBLogger"
 	"database/sql"
 	"encoding/json"
 	"io/ioutil"
@@ -19,17 +19,17 @@ func Login(userInfo UserInfo) (bool, string) {
 	sqlStatement := "SELECT account FROM cluser WHERE account = $1 AND password = $2;"
 	stmt, err := Db.Prepare(sqlStatement)
 	if err != nil {
-		logger.Errorln("查询出错", err)
+		TbLogger.Error("查询出错", err)
 		return false, "查询出错"
 	}
 	var account string
 	err = stmt.QueryRow(userInfo.Account, userInfo.Password).Scan(&account)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			logger.Errorln("账号不存在", err)
+			TbLogger.Error("账号不存在", err)
 			return false, "账号不存在"
 		} else {
-			logger.Errorln("查询出错", err)
+			TbLogger.Error("查询出错", err)
 			return false, "查询出错"
 		}
 	}
@@ -46,13 +46,13 @@ func LoginHandle(w http.ResponseWriter, r *http.Request) {
 
 	result, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		logger.Errorln("ioutil失败", err)
+		TbLogger.Error("ioutil失败", err)
 
 	}
 	var userInfo UserInfo
 	err = json.Unmarshal(result, &userInfo)
 	if err != nil {
-		logger.Errorln("读取数据失败", err)
+		TbLogger.Error("读取数据失败", err)
 		fb.SendData(501, "读取数据失败", "null")
 		return
 	}

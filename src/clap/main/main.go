@@ -1,23 +1,24 @@
 package main
 
 import (
-	"clap/config"
 	_ "clap/db"
-	_ "clap/logger"
-	"clap/login"
 	_ "clap/memory"
-	"clap/serve"
-	"log"
+	."clap/TBLogger"
 	"net/http"
+	"clap/serve"
+	"clap/login"
+	"log"
+	"strconv"
+	"time"
 )
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
 func main() {
-	config.LoadConfig()
+	go func() {
+		for i := 0;i<100;i++{
+			TbLogger.Info("插入日志测试:"+strconv.Itoa(i))
+			time.Sleep(1*time.Hour)
+		}
+	}()
 	http.HandleFunc("/tt2b", serve.SayhelloName)
 	http.HandleFunc("/count", serve.Count)
 	http.HandleFunc("/gsql", serve.SqlGet)
@@ -35,3 +36,5 @@ func main() {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
+
+
