@@ -1,27 +1,27 @@
 package TBLogger
 
 import (
-	"os"
 	"bytes"
-	"time"
-	"runtime"
+	"clap/db"
+	"database/sql"
 	"fmt"
-	"path/filepath"
-	"strconv"
-	"strings"
-	"os/exec"
 	"io"
 	"log"
-	"database/sql"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"strconv"
+	"strings"
 	"sync"
-	"clap/db"
+	"time"
 )
 
 type Logger interface {
-	Debug(debugMsg...interface{})
-	Info(infoMsg...interface{})
-	Warn(warnMsg...interface{})
-	Error(errorMsg...interface{})
+	Debug(debugMsg ...interface{})
+	Info(infoMsg ...interface{})
+	Warn(warnMsg ...interface{})
+	Error(errorMsg ...interface{})
 }
 
 var TbLogger *TBLogger
@@ -79,12 +79,12 @@ type TBLogger struct {
 	Closed bool
 }
 
-func init(){
-	NewTBLogger(true,true,10,20,db.Db)
+func init() {
+	NewTBLogger(true, true, 10, 20, db.Db)
 	TbLogger.Info("创建TbLogger成功!")
 }
 
-func NewTBLogger(logFunc bool,logFilePath bool,cacheNum int,periodTime int,db *sql.DB){
+func NewTBLogger(logFunc bool, logFilePath bool, cacheNum int, periodTime int, db *sql.DB) {
 	TbLogger = new(TBLogger)
 
 	if cacheNum <= 0 {
@@ -103,46 +103,46 @@ func NewTBLogger(logFunc bool,logFilePath bool,cacheNum int,periodTime int,db *s
 	TbLogger.PeriodTime = periodTime
 	TbLogger.RunTimeCaller = 2
 	TbLogger.DbConfig = NewDbOutPut(db)
-	TbLogger.MsgQueue = make(chan string,TbLogger.CacheNum)
+	TbLogger.MsgQueue = make(chan string, TbLogger.CacheNum)
 	TbLogger.syncReq = make(chan struct{})
 	TbLogger.TodayDate = time.Now().Format("2006-01-02")
 	TbLogger.FileName = "Logger.txt"
 
 	var multi io.Writer
 
-	binPath , err := GetProDir()
-	if err!=nil{
+	binPath, err := GetProDir()
+	if err != nil {
 		panic("get binPath failed " + err.Error())
 		return
 	}
 
-	TbLogger.LoggerFilePath = binPath+"/log/"
+	TbLogger.LoggerFilePath = binPath + "/log/"
 
-	err = mkdirProDir(binPath+"/log")
+	err = mkdirProDir(binPath + "/log")
 	if err != nil {
 		panic("mkdirProDir failed " + err.Error())
 	}
 
-	logFile,err:= os.OpenFile(TbLogger.LoggerFilePath+TbLogger.FileName,
-		os.O_WRONLY|os.O_CREATE|os.O_APPEND,0666)
-	if err!=nil {
+	logFile, err := os.OpenFile(TbLogger.LoggerFilePath+TbLogger.FileName,
+		os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
 		panic("OpenFile fail")
 	}
 	TbLogger.CurFile = logFile
 
-	if TbLogger.DbConfig !=nil {
-		multi = io.MultiWriter(logFile,TbLogger.DbConfig)
-	}else{
+	if TbLogger.DbConfig != nil {
+		multi = io.MultiWriter(logFile, TbLogger.DbConfig)
+	} else {
 		multi = io.MultiWriter(logFile)
 	}
 
-	TbLogger.innerLogger = log.New(multi,"",0)
+	TbLogger.innerLogger = log.New(multi, "", 0)
 
 	//go TbLogger.SyncRequest()
 	go TbLogger.ListenTimeOut()
 }
 
-func (tbl *TBLogger)GetFormat(level string) string {
+func (tbl *TBLogger) GetFormat(level string) string {
 	var buf bytes.Buffer
 
 	//时间信息
@@ -150,15 +150,15 @@ func (tbl *TBLogger)GetFormat(level string) string {
 
 	buf.WriteString(level)
 
-	funcName, file, line, ok:= runtime.Caller(tbl.RunTimeCaller)
+	funcName, file, line, ok := runtime.Caller(tbl.RunTimeCaller)
 	if ok {
-		if tbl.LogFilePath{
+		if tbl.LogFilePath {
 			buf.WriteString(filepath.Base(file))
 			buf.WriteString(":")
 			buf.WriteString(strconv.Itoa(line))
 			buf.WriteString(" ")
 		}
-		if tbl.LogFunc{
+		if tbl.LogFunc {
 			buf.WriteString(runtime.FuncForPC(funcName).Name())
 			buf.WriteString(" ")
 		}
@@ -166,36 +166,36 @@ func (tbl *TBLogger)GetFormat(level string) string {
 	return buf.String()
 }
 
-func (tbl *TBLogger)GetAllStack() string {
+func (tbl *TBLogger) GetAllStack() string {
 	var buf bytes.Buffer
-	bufallstack := make([]byte, 1 << 20)
-	runtime.Stack(bufallstack,false)
+	bufallstack := make([]byte, 1<<20)
+	runtime.Stack(bufallstack, false)
 	buf.Write(bufallstack)
 	return buf.String()
 }
 
-func (tbl *TBLogger)Debug(msg...interface{}){
+func (tbl *TBLogger) Debug(msg ...interface{}) {
 	format := tbl.GetFormat("DEBUG ")
-	tbl.outPutMsg(format,msg...)
+	tbl.outPutMsg(format, msg...)
 }
 
-func (tbl *TBLogger)Info(msg...interface{}){
+func (tbl *TBLogger) Info(msg ...interface{}) {
 	format := tbl.GetFormat("INFO ")
-	tbl.outPutMsg(format,msg...)
+	tbl.outPutMsg(format, msg...)
 }
 
-func (tbl *TBLogger)Warn(msg...interface{}){
+func (tbl *TBLogger) Warn(msg ...interface{}) {
 	format := tbl.GetFormat("WARN ")
-	tbl.outPutMsg(format,msg...)
+	tbl.outPutMsg(format, msg...)
 }
 
-func (tbl *TBLogger)Error(msg...interface{}){
+func (tbl *TBLogger) Error(msg ...interface{}) {
 	format := tbl.GetFormat("ERROR ")
-	tbl.outPutMsg(format,msg...)
+	tbl.outPutMsg(format, msg...)
 }
 
 //定时器，没经过TBLogger.PeriodTime 秒就请求写入一次
-func (tbl *TBLogger)ListenTimeOut(){
+func (tbl *TBLogger) ListenTimeOut() {
 	tbl.Ticker = time.NewTicker(time.Duration(tbl.PeriodTime) * time.Second)
 	for {
 		select {
@@ -206,11 +206,11 @@ func (tbl *TBLogger)ListenTimeOut(){
 }
 
 //日期变化，新创文件，并更改原来log文件名称
-func (tbl *TBLogger)ChangeDateFile(){
+func (tbl *TBLogger) ChangeDateFile() {
 
 	var buf bytes.Buffer
 
-	if tbl.CurFile == nil{
+	if tbl.CurFile == nil {
 		buf.Reset()
 		buf.WriteString("ChangeDateFile--CurFile nil")
 		tbl.DbConfig.Write(buf.Bytes())
@@ -219,18 +219,18 @@ func (tbl *TBLogger)ChangeDateFile(){
 
 	preFile := tbl.CurFile
 
-	_,err :=  preFile.Stat()
-	if err!=nil {
+	_, err := preFile.Stat()
+	if err != nil {
 		buf.Reset()
 		buf.WriteString("ChangeDateFile--preFile.Stat() Fail")
 		tbl.DbConfig.Write(buf.Bytes())
 		return
 	}
 
-	filePath := tbl.LoggerFilePath+tbl.FileName
+	filePath := tbl.LoggerFilePath + tbl.FileName
 
 	err = preFile.Close()
-	if err!=nil  {
+	if err != nil {
 		buf.Reset()
 		buf.WriteString("ChangeDateFile--preFile.Close() Fail")
 		tbl.DbConfig.Write(buf.Bytes())
@@ -239,12 +239,17 @@ func (tbl *TBLogger)ChangeDateFile(){
 	//重新命名，在旧的文件名上加上日期
 	nowTime := time.Now()
 	time1dAgo := nowTime.Add(-1 * time.Hour * 24)
-	err = os.Rename(filePath,filePath+"."+time1dAgo.Format("2006-01-02"))
+	err = os.Rename(filePath, time1dAgo.Format("2006-01-02 ")+tbl.FileName)
+	if err != nil {
+		buf.Reset()
+		buf.WriteString("ChangeDateFile--os.Rename Fail" + err.Error())
+		tbl.DbConfig.Write(buf.Bytes())
+	}
 
 	//创建新文件
-	NextFile,err:= os.OpenFile(filePath,
-		os.O_WRONLY|os.O_CREATE|os.O_APPEND,0666)
-	if err!=nil {
+	NextFile, err := os.OpenFile(filePath,
+		os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
 		buf.Reset()
 		buf.WriteString("ChangeDateFile--Open NextFile Fail")
 		tbl.DbConfig.Write(buf.Bytes())
@@ -252,16 +257,17 @@ func (tbl *TBLogger)ChangeDateFile(){
 	}
 
 	//重新设置输出
-	multi := io.MultiWriter(NextFile,os.Stdout,tbl.DbConfig)
+	multi := io.MultiWriter(NextFile, tbl.DbConfig)
 	tbl.innerLogger.SetOutput(multi)
 	tbl.CurFile = NextFile
+	tbl.TodayDate = nowTime.Format("2006-01-02")
 }
 
 //关闭TBLogger
-func (tbl *TBLogger)Close() {
+func (tbl *TBLogger) Close() {
 	var buf bytes.Buffer
 	err := tbl.CurFile.Close()
-	if err!=nil {
+	if err != nil {
 		buf.Reset()
 		buf.WriteString("Close() CurFile.Close() Fail")
 		tbl.DbConfig.Write(buf.Bytes())
@@ -276,21 +282,21 @@ func (tbl *TBLogger)Close() {
 }
 
 //将消息输出到控制台并加入到管道队列中
-func (tbl *TBLogger)outPutMsg(format string,msg...interface{}){
-	fmt.Println(append([]interface{}{format},msg...)...)
+func (tbl *TBLogger) outPutMsg(format string, msg ...interface{}) {
+	fmt.Println(append([]interface{}{format}, msg...)...)
 	select {
-	case tbl.MsgQueue<-fmt.Sprintln(append([]interface{}{format},msg...)...):
+	case tbl.MsgQueue <- fmt.Sprintln(append([]interface{}{format}, msg...)...):
 	default:
 		tbl.Write()
-		tbl.MsgQueue<-fmt.Sprintln(append([]interface{}{format},msg...)...)
+		tbl.MsgQueue <- fmt.Sprintln(append([]interface{}{format}, msg...)...)
 	}
 }
 
 // 写入到数据库和Log文件
-func (tbl *TBLogger)Write(){
+func (tbl *TBLogger) Write() {
 	tbl.Lock()
 	defer tbl.Unlock()
-	nowDate:= time.Now().Format("2006-01-02")
+	nowDate := time.Now().Format("2006-01-02")
 	if nowDate != tbl.TodayDate {
 		tbl.ChangeDateFile()
 	}
