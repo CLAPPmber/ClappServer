@@ -239,7 +239,7 @@ func (tbl *TBLogger) ChangeDateFile() {
 	//重新命名，在旧的文件名上加上日期
 	nowTime := time.Now()
 	time1dAgo := nowTime.Add(-1 * time.Hour * 24)
-	err = os.Rename(filePath, time1dAgo.Format("2006-01-02 ")+tbl.FileName)
+	err = os.Rename(filePath, tbl.LoggerFilePath+time1dAgo.Format("2006-01-02 ")+tbl.FileName)
 	if err != nil {
 		buf.Reset()
 		buf.WriteString("ChangeDateFile--os.Rename Fail" + err.Error())
