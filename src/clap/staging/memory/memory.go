@@ -1,7 +1,7 @@
 package memory
 
 import (
-	"clap/session"
+	"clap/staging/session"
 	"container/list"
 	"sync"
 	"time"

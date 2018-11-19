@@ -1,11 +1,11 @@
-package serve
+package practiceModel
 
 type Record struct {
 	Chapter_num  int `json:"chapter_num"`
 	Quesiont_num int `json:"question_num"`
 }
 
-type prarecord struct {
+type Prarecord struct {
 	Account string   `json:"account"`
 	Record  []Record `json:"record"`
 }

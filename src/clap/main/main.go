@@ -1,36 +1,26 @@
 package main
 
 import (
-	_ "clap/db"
-	_ "clap/memory"
-	."clap/TBLogger"
+	_ "clap/staging/db"
+	_ "clap/staging/memory"
 	"net/http"
-	"clap/serve"
-	"clap/login"
 	"log"
-	"strconv"
-	"time"
+	"clap/serve/UserServe"
+	"clap/serve/PracticeServe"
+	"clap/serve/TestServe"
+	_"clap/staging/TBCache"
 )
 
 func main() {
-	go func() {
-		for i := 0;i<100;i++{
-			TbLogger.Info("插入日志测试:"+strconv.Itoa(i))
-			time.Sleep(1*time.Hour)
-		}
-	}()
-	http.HandleFunc("/tt2b", serve.SayhelloName)
-	http.HandleFunc("/count", serve.Count)
-	http.HandleFunc("/gsql", serve.SqlGet)
-	http.HandleFunc("/clear",serve.Clear)
-	http.HandleFunc("/gsqls", serve.SqlGets)
-	http.HandleFunc("/testpost", serve.TestPost)
-	http.HandleFunc("/prarecord", serve.Prarecord)
-	http.HandleFunc("/getallrec", serve.Getallrec)
-	http.HandleFunc("/login", login.LoginHandle)
-	http.HandleFunc("/register", login.RegisteredHandle)
-	http.HandleFunc("/changepassword",serve.ChangePassword)
-	http.HandleFunc("/clearrecord",serve.Clear)
+	http.HandleFunc("/gsql", TestServe.SqlGetHandle)
+	http.HandleFunc("/clear",PracticeServe.ClearHandle)
+	http.HandleFunc("/gsqls", TestServe.SqlGetsHandle)
+	http.HandleFunc("/testpost", TestServe.TestPostHandle)
+	http.HandleFunc("/prarecord", PracticeServe.PrarecordHandle)
+	http.HandleFunc("/getallrec", PracticeServe.GetallrecHandle)
+	http.HandleFunc("/login", UserServe.LoginHandle)
+	http.HandleFunc("/register", UserServe.RegisteredHandle)
+	http.HandleFunc("/changepassword",UserServe.ChangePasswordHandle)
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
