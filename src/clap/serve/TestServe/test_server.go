@@ -34,7 +34,7 @@ func SqlGetHandle(w http.ResponseWriter, r *http.Request) {
 	TbLogger.Info("调用SqlGets",err)
 	fb.SendData(200,"SqlGet!",cluser)
 }
-
+    
 //将收到的数据在重新发送回去
 func TestPostHandle(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
