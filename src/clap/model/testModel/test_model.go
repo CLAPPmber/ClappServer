@@ -3,8 +3,8 @@ package testModel
 import (
 	. "clap/staging/TBLogger"
 	. "clap/staging/db"
-	. "clap/model/practiceModel"
 	"errors"
+	."clap/DataStructure"
 )
 func SqlGets()([]Cluser,error){
 	var clusers []Cluser

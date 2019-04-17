@@ -296,7 +296,7 @@ func (tbl *TBLogger) outPutMsg(format string, msg ...interface{}) {
 func (tbl *TBLogger) Write() {
 	tbl.Lock()
 	defer tbl.Unlock()
-	nowDate := time.Now().Format("2006-01-02")
+	nowDate := time.Now().Format("2006-01-02") //判断文件大小，如果很小，则删除原来文件，写入新的文件？
 	if nowDate != tbl.TodayDate {
 		tbl.ChangeDateFile()
 	}
@@ -305,7 +305,7 @@ func (tbl *TBLogger) Write() {
 			select {
 			case msg := <-tbl.MsgQueue:
 				tbl.innerLogger.Println(msg)
-			default:
+ 			default:
 				return
 			}
 		}

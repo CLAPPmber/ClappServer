@@ -1,14 +1,14 @@
 package main
 
 import (
-	_ "clap/staging/db"
-	_ "clap/staging/memory"
-	"net/http"
-	"log"
-	"clap/serve/UserServe"
 	"clap/serve/PracticeServe"
 	"clap/serve/TestServe"
-	_"clap/staging/TBCache"
+	"clap/serve/UserServe"
+	_ "clap/staging/TBCache"
+	_ "clap/staging/db"
+	_ "clap/staging/memory"
+	"log"
+	"net/http"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/testpost", TestServe.TestPostHandle)
 	http.HandleFunc("/prarecord", PracticeServe.PrarecordHandle)
 	http.HandleFunc("/getallrec", PracticeServe.GetallrecHandle)
-	http.HandleFunc("/login", UserServe.LoginHandle)
+	http.HandleFunc("/logn", UserServe.LoginHandle)
 	http.HandleFunc("/register", UserServe.RegisteredHandle)
 	http.HandleFunc("/changepassword",UserServe.ChangePasswordHandle)
 	err := http.ListenAndServe(":9090", nil)
@@ -26,5 +26,6 @@ func main() {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
+
 
 

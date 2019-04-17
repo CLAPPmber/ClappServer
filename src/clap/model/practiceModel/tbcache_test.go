@@ -2,24 +2,37 @@ package practiceModel
 
 import (
 	"testing"
-	"math/rand"
+	"reflect"
 )
+
+type data struct {
+	Hp int
+}
 
 func BenchmarkGetallrec(b *testing.B){
 
-	cluesrs := []Cluser{
-		{Account:"userone",Password:"123123"},
-		{Account:"usertt1",Password:"123123"},
-		{Account:"usernew",Password:"123123"},
-		{Account:"admin1",Password:"asdasd"},
-		{Account:"admin123",Password:"asdasd"},
-		{Account:"admliang",Password:"asdasd"},
-	}
+	v := data{Hp:2}
+
+	b.StopTimer()
+	b.ResetTimer()
 	b.StartTimer()
-	for i:=0;i<b.N;i++{
-		b.StopTimer()
-		index := rand.Intn(6)
-		b.StartTimer()
-		Getallrec(cluesrs[index])
+
+	for i:=0 ;i < b.N;i++{
+		v.Hp = 3
+	}
+}
+
+func BenchmarkTestReflect(b *testing.B){
+	v:=data{Hp:2}
+
+	vv := reflect.ValueOf(&v).Elem()
+	f:=vv.FieldByName("Hp")
+
+	b.StopTimer()
+	b.ResetTimer()
+	b.StartTimer()
+
+	for i :=0;i<b.N;i++{
+		f.SetInt(3)
 	}
 }

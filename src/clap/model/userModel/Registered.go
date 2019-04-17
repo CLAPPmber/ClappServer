@@ -4,6 +4,8 @@ import (
 	. "clap/staging/db"
 	. "clap/staging/TBLogger"
 	//"database/sql"
+	."clap/DataStructure"
+
 )
 
 func CheckUser(data UserInfo) (bool, error) {

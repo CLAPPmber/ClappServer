@@ -9,9 +9,11 @@ import (
 	. "clap/staging/TBLogger"
 	. "clap/model/practiceModel"
 	"html/template"
+	."clap/DataStructure"
+
 )
 
-//提交做题记录
+//提交做题记录  todo 修改
 func PrarecordHandle(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 
@@ -39,7 +41,7 @@ func PrarecordHandle(w http.ResponseWriter, r *http.Request) {
 	fb.SendStatus(200, "提交记录成功")
 }
 
-//获取做题记录
+//获取做题记录 todo 修改
 func GetallrecHandle(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 

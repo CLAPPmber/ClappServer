@@ -4,6 +4,7 @@ import (
 	. "clap/staging/TBLogger"
 	. "clap/staging/db"
 	"errors"
+	."clap/DataStructure"
 )
 func ChangePasswor(userInfo UserInfo) (error) {
 

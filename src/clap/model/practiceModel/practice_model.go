@@ -8,7 +8,12 @@ import (
 	"net/http"
 	"clap/staging/feedback"
 	."clap/staging/TBCache"
+	."clap/DataStructure"
 )
+
+func init(){
+	return
+}
 
 func SubmitRecord(prarec Prarecord)(error){
 
