@@ -13,7 +13,7 @@ import (
 
 )
 
-//提交做题记录  todo 修改
+//提交做题记录  old
 func PrarecordHandle(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 
@@ -41,7 +41,7 @@ func PrarecordHandle(w http.ResponseWriter, r *http.Request) {
 	fb.SendStatus(200, "提交记录成功")
 }
 
-//获取做题记录 todo 修改
+//获取用户做题记录 old
 func GetallrecHandle(w http.ResponseWriter, r *http.Request) {
 	fb := feedback.NewFeedBack(w)
 
@@ -61,7 +61,7 @@ func GetallrecHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err,retrec := Getallrec(cluser)
+	err,retrec := Getallrec(cluser,0)
 	if err!=nil{
 		TbLogger.Error(err,"获取记录失败")
 		fb.SendErr(err, "获取记录失败", reterr)
@@ -108,3 +108,6 @@ func ClearHandle(w http.ResponseWriter, r *http.Request){
 		http.Redirect(w, r, "/", 302)
 	}
 }
+
+
+

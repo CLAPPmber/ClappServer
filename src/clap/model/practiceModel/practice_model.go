@@ -63,7 +63,7 @@ func SubmitRecord(prarec Prarecord)(error){
 	return nil
 }
 
-func Getallrec(cluser Cluser)(error,[]Retprorec) {
+func Getallrec(cluser Cluser,flag int)(error,[]Retprorec) {
 	var retrec []Retprorec
 
 	getCache := TbCache.GetValue(cluser.Account)	//从缓存中获取
@@ -95,7 +95,7 @@ func Getallrec(cluser Cluser)(error,[]Retprorec) {
 		}
 	}
 
-	rows, err := tx.Query("SELECT chapter_num ,COUNT(*) FROM pra_record WHERE account = $1 group by chapter_num", cluser.Account)
+	rows, err := tx.Query("SELECT chapter_num ,COUNT(*) FROM pra_record WHERE account = $1 and flag = $2 group by chapter_num", cluser.Account,flag)
 	defer rows.Close()
 	if err != nil {
 		tx.Rollback()

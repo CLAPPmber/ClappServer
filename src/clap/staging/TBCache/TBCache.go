@@ -133,7 +133,7 @@ func (st *TBCache)InsertCache(key interface{},value interface{},expiration...int
 }
 
 //检查给定key值是否在缓存中,存在便返回Value
-func (st *TBCache)GetValue(key interface{}) (interface{}) {
+func (st *TBCache)GetValue(key interface{}) interface{} {
 	if st.Bucket == nil {
 		TbLogger.Info("缓存容器没有初始化")
 		return nil
