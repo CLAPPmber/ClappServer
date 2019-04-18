@@ -334,7 +334,7 @@ func GetUserHeadImage(w http.ResponseWriter,r *http.Request){
 	}
 
  	var retUser UserInfo
-	err := db.Db.QueryRow(`SELECT headimage FROM	cluser WHERE  account = $1`,account).Scan(&retUser)
+	err := db.Db.QueryRow(`SELECT headimage FROM	cluser WHERE  account = $1`,account).Scan(&retUser.UserHead)
 	if err!=nil{
 	    TbLogger.Error("get user head image fail",err)
 	    _=fb.SendData(400,"get user head image fail",nil)
