@@ -29,6 +29,8 @@ func main() {
 	http.HandleFunc("/api/exersys/get_rec",UserServe.GetUserTestRecord)
 	http.HandleFunc("/api/exersys/put_doing_ans",TestServe.PutDoingAns)
 	http.HandleFunc("/api/exersys/get_test_msg",TestServe.GetQuestionMsg)
+	http.HandleFunc("/api/get_user_head_image",UserServe.GetUserHeadImage)
+	http.HandleFunc("/api/update_user_head_image",UserServe.UpdateUesrHeadImage)
 
 
 
