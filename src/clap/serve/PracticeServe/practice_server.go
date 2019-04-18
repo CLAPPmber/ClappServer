@@ -81,9 +81,8 @@ func ClearHandle(w http.ResponseWriter, r *http.Request){
 			TbLogger.Error(err)
 			fmt.Println(err)
 		}
-		t.Execute(w, nil)
 		w.Header().Set("Content-type", "text/html")
-
+		t.Execute(w, nil)
 	} else {
 		//请求的是登陆数据，那么执行登陆的逻辑判断
 		err := r.ParseForm()

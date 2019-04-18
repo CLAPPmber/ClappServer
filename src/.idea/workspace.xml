@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="714fc908-ee7c-44c1-8f3e-4c055ebeb960" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clap/DataStructure/practice_data.go" beforeDir="false" afterPath="$PROJECT_DIR$/clap/DataStructure/practice_data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clap/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/clap/main/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clap/model/practiceModel/practice_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/clap/model/practiceModel/practice_model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clap/serve/TestServe/test_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/clap/serve/TestServe/test_server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clap/serve/UserServe/user_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/clap/serve/UserServe/user_server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clap/staging/TBCache/TBCache.go" beforeDir="false" afterPath="$PROJECT_DIR$/clap/staging/TBCache/TBCache.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -69,16 +62,6 @@
         <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
         <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="ish2b@123.207.25.239" type="feb32156:DbDataSourceImpl" />
-        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="ish2b: database" type="162271b6:PgImplModel$Database" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
-        <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="pra_record: table" type="69fad909:PgImplModel$LocalTable" />
-      </path>
     </expand>
     <select />
   </component>
@@ -87,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/clap/main/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+            <state relative-caret-position="362">
+              <caret line="13" column="13" lean-forward="true" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
               <folding>
                 <element signature="e#14#191#0" expanded="true" />
               </folding>
@@ -96,15 +79,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
-              <caret line="75" column="42" lean-forward="true" selection-start-line="75" selection-start-column="42" selection-end-line="75" selection-end-column="42" />
+            <state relative-caret-position="520">
+              <caret line="85" selection-start-line="85" selection-end-line="85" />
               <folding>
                 <element signature="n#!!block;n#PrarecordHandle#0" />
-                <element signature="n#!!block;n#ClearHandle#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://E:/gl/go/src/html/template/template.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="131">
+              <caret line="117" column="19" selection-start-line="117" selection-start-column="19" selection-end-line="117" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -119,7 +110,7 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="das://27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/database/ish2b/schema/public/table/pra_record">
+        <entry file="das://27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/database/ish2b/schema/public/table/syslog">
           <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
             <state>
               <filtering enabled="true" />
@@ -128,60 +119,24 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/clap/model/practiceModel/practice_model.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="579">
-              <caret line="95" column="5" lean-forward="true" selection-start-line="83" selection-end-line="95" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/clap/staging/feedback/feedback.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
+            <state relative-caret-position="720">
               <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/clap/serve/UserServe/user_server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="317" lean-forward="true" selection-start-line="317" selection-end-line="317" />
+            <state relative-caret-position="339">
+              <caret line="307" column="23" lean-forward="true" selection-start-line="307" selection-start-column="23" selection-end-line="307" selection-end-column="23" />
               <folding>
                 <element signature="n#!!block;n#LoginHandle#0" />
-                <element signature="e#262#312#0" />
-                <element signature="e#400#439#0" />
-                <element signature="e#519#601#0" />
-                <element signature="e#638#686#0" />
-                <element signature="e#692#737#0" />
                 <element signature="n#!!block;n#RegisteredHandle#0" />
-                <element signature="e#834#884#0" />
-                <element signature="e#971#1053#0" />
-                <element signature="e#1126#1204#0" />
-                <element signature="e#1252#1335#0" />
-                <element signature="e#1346#1422#0" />
-                <element signature="e#1468#1550#0" />
-                <element signature="e#1558#1602#0" />
-                <element signature="e#1608#1686#0" />
                 <element signature="n#!!block;n#ChangePasswordHandle#0" />
-                <element signature="e#1790#1840#0" />
-                <element signature="e#1928#2014#0" />
-                <element signature="e#2095#2177#0" />
-                <element signature="e#2223#2273#0" />
-                <element signature="e#2463#2523#0" />
-                <element signature="e#2722#2794#0" />
-                <element signature="e#2822#2829#0" />
-                <element signature="e#0#31#1" />
-                <element signature="e#2937#3009#0" />
-                <element signature="e#3113#3115#0" />
-                <element signature="e#3274#3342#0" />
                 <element signature="n#!!block;n#GetUserProgress#0" />
-                <element signature="e#3808#3865#0" />
-                <element signature="e#4446#4526#0" />
-                <element signature="e#4368#4375#0" />
               </folding>
             </state>
           </provider>
@@ -190,7 +145,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/clap/DataStructure/practice_data.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="548">
+            <state relative-caret-position="570">
               <caret line="19" column="38" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="38" />
             </state>
           </provider>
@@ -208,7 +163,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/clap/serve/TestServe/test_server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
+            <state relative-caret-position="1530">
               <caret line="150" selection-start-line="150" selection-end-line="161" selection-end-column="5" />
               <folding>
                 <element signature="e#206#319#0" />
@@ -231,6 +186,7 @@
       <find>question_num</find>
       <find>account</find>
       <find>QueryRow</find>
+      <find>clearrecord</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="E:\gl\go" />
@@ -249,15 +205,15 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/clap/go.mod" />
-        <option value="$PROJECT_DIR$/clap/main/main.go" />
         <option value="$PROJECT_DIR$/clap/serve/TestServe/test_server.go" />
         <option value="$PROJECT_DIR$/clap/staging/TBCache/TBCache.go" />
         <option value="$PROJECT_DIR$/clap/model/practiceModel/practice_model.go" />
         <option value="$PROJECT_DIR$/clap/DataStructure/practice_data.go" />
-        <option value="$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/console.sql" />
         <option value="$PROJECT_DIR$/clap/serve/UserServe/user_server.go" />
+        <option value="$PROJECT_DIR$/clap/main/main.go" />
+        <option value="$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go" />
       </list>
     </option>
   </component>
@@ -394,13 +350,12 @@
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16899142" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1555794" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Database Console" weight="0.0476731" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.1816118" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.07945517" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.27468786" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -410,10 +365,11 @@
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3291714" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.34733257" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="Database Console" order="12" weight="0.0476731" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.091738194" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.19742489" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -422,6 +378,18 @@
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
     <proxy>https://goproxy.io/</proxy>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go</url>
+          <line>78</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/clap/go.sum">
@@ -504,34 +472,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clap/DataStructure/practice_data.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="548">
-          <caret line="19" column="38" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="38" />
+    <entry file="das://27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/database/ish2b/schema/public/table/pra_record">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/clap/model/practiceModel/practice_model.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="579">
-          <caret line="95" column="5" lean-forward="true" selection-start-line="83" selection-end-line="95" selection-end-column="5" />
+        <state relative-caret-position="2580">
+          <caret line="95" column="5" selection-start-line="83" selection-end-line="95" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go">
+    <entry file="file://$PROJECT_DIR$/clap/staging/feedback/feedback.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="75" column="42" lean-forward="true" selection-start-line="75" selection-start-column="42" selection-end-line="75" selection-end-column="42" />
-          <folding>
-            <element signature="n#!!block;n#PrarecordHandle#0" />
-            <element signature="n#!!block;n#ClearHandle#0" />
-          </folding>
+        <state relative-caret-position="720">
+          <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/clap/DataStructure/practice_data.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="19" column="38" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="11" selection-start-line="11" selection-end-line="11" selection-end-column="101" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/clap/serve/TestServe/test_server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
+        <state relative-caret-position="1530">
           <caret line="150" selection-start-line="150" selection-end-line="161" selection-end-column="5" />
           <folding>
             <element signature="e#206#319#0" />
@@ -544,17 +522,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/database/ish2b/schema/public/table/pra_record">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/console.sql">
+    <entry file="file://$PROJECT_DIR$/clap/serve/UserServe/user_server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="11" selection-start-line="11" selection-end-line="11" selection-end-column="101" />
+        <state relative-caret-position="339">
+          <caret line="307" column="23" lean-forward="true" selection-start-line="307" selection-start-column="23" selection-end-line="307" selection-end-column="23" />
+          <folding>
+            <element signature="n#!!block;n#LoginHandle#0" />
+            <element signature="n#!!block;n#RegisteredHandle#0" />
+            <element signature="n#!!block;n#ChangePasswordHandle#0" />
+            <element signature="n#!!block;n#GetUserProgress#0" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -565,59 +542,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="das://27dc7ef7-0dd6-4a1f-a15e-1895b16e4fd2/database/ish2b/schema/public/table/syslog">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://E:/gl/go/src/html/template/template.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="117" column="19" selection-start-line="117" selection-start-column="19" selection-end-line="117" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/clap/main/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+        <state relative-caret-position="362">
+          <caret line="13" column="13" lean-forward="true" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
           <folding>
             <element signature="e#14#191#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clap/staging/feedback/feedback.go">
+    <entry file="file://$PROJECT_DIR$/clap/serve/PracticeServe/practice_server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="28" column="53" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/clap/serve/UserServe/user_server.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="317" lean-forward="true" selection-start-line="317" selection-end-line="317" />
+        <state relative-caret-position="520">
+          <caret line="85" selection-start-line="85" selection-end-line="85" />
           <folding>
-            <element signature="n#!!block;n#LoginHandle#0" />
-            <element signature="e#262#312#0" />
-            <element signature="e#400#439#0" />
-            <element signature="e#519#601#0" />
-            <element signature="e#638#686#0" />
-            <element signature="e#692#737#0" />
-            <element signature="n#!!block;n#RegisteredHandle#0" />
-            <element signature="e#834#884#0" />
-            <element signature="e#971#1053#0" />
-            <element signature="e#1126#1204#0" />
-            <element signature="e#1252#1335#0" />
-            <element signature="e#1346#1422#0" />
-            <element signature="e#1468#1550#0" />
-            <element signature="e#1558#1602#0" />
-            <element signature="e#1608#1686#0" />
-            <element signature="n#!!block;n#ChangePasswordHandle#0" />
-            <element signature="e#1790#1840#0" />
-            <element signature="e#1928#2014#0" />
-            <element signature="e#2095#2177#0" />
-            <element signature="e#2223#2273#0" />
-            <element signature="e#2463#2523#0" />
-            <element signature="e#2722#2794#0" />
-            <element signature="e#2822#2829#0" />
-            <element signature="e#0#31#1" />
-            <element signature="e#2937#3009#0" />
-            <element signature="e#3113#3115#0" />
-            <element signature="e#3274#3342#0" />
-            <element signature="n#!!block;n#GetUserProgress#0" />
-            <element signature="e#3808#3865#0" />
-            <element signature="e#4446#4526#0" />
-            <element signature="e#4368#4375#0" />
+            <element signature="n#!!block;n#PrarecordHandle#0" />
           </folding>
         </state>
       </provider>
