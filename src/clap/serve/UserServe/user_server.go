@@ -316,3 +316,67 @@ func GetUserTestRecord(w http.ResponseWriter,r *http.Request){
 	_=fb.SendData(200,"获取数据成功",qa)
 	return
 }
+
+//todo 获取用户头像
+func GetUserHeadImage(w http.ResponseWriter,r *http.Request){
+	fb := feedback.NewFeedBack(w)
+
+	if r.Method != "POST" {
+		fb.SendData(400, "请求的方法不是post", "null")
+		return
+	}
+
+	value := r.URL.Query()
+	account := value.Get("account")
+	if account==""{
+		_=fb.SendData(400,"account is empty",nil)
+		return
+	}
+
+ 	var retUser UserInfo
+	err := db.Db.QueryRow(`SELECT headimage FROM	cluser WHERE  account = $1`,account).Scan(&retUser)
+	if err!=nil{
+	    TbLogger.Error("get user head image fail",err)
+	    _=fb.SendData(400,"get user head image fail",nil)
+	    return
+	}
+
+	_=fb.SendData(200,"获取用户头像成功",retUser)
+	return
+
+}
+
+//todo 更新用户头像
+func UpdateUesrHeadImage(w http.ResponseWriter,r *http.Request){
+	fb := feedback.NewFeedBack(w)
+
+	if r.Method != "GET" {
+		fb.SendData(400, "请求的方法不是GET", "null")
+		return
+	}
+
+	detail, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		TbLogger.Error("读取数据失败", err)
+		fb.SendData(400, "读取数据失败", "null")
+		return
+	}
+
+	var data UserInfo
+	err = json.Unmarshal(detail, &data)
+	if err != nil {
+		TbLogger.Error("解析数据失败", err)
+		fb.SendData(503, "解析数据失败", "")
+		return
+	}
+
+	_,err = db.Db.Exec(`UPDATE cluser SET headimage = $1 WHERE account = $2`,data.UserHead,data.Account)
+	if err!=nil{
+	    TbLogger.Error("update user head image fai;",err)
+	    _=fb.SendData(400,"update user head image fai;",nil)
+	    return
+	}
+
+	_=fb.SendData(200,"更新头像成功","")
+	return
+}
