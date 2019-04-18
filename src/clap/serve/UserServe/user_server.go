@@ -48,6 +48,7 @@ func LoginHandle(w http.ResponseWriter, r *http.Request) {
 		fb.SendData(200, "登录成功", "null")
 		return
 	} else {
+		TbLogger.Error("登录失败", err)
 		fb.SendData(501, msg, "null")
 		return
 	}
