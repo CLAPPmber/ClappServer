@@ -321,8 +321,8 @@ func GetUserTestRecord(w http.ResponseWriter,r *http.Request){
 func GetUserHeadImage(w http.ResponseWriter,r *http.Request){
 	fb := feedback.NewFeedBack(w)
 
-	if r.Method != "POST" {
-		fb.SendData(400, "请求的方法不是post", "null")
+	if r.Method != "GET" {
+		fb.SendData(400, "请求的方法不是get", "null")
 		return
 	}
 
