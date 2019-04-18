@@ -33,7 +33,7 @@ func CheckUser(data UserInfo) (bool, error) {
 
 func Registered(data UserInfo) (bool, error) {
 
-	sqlStatement := "INSERT INTO cluser(account, password) VALUES ($1, $2);"
+	sqlStatement := "INSERT INTO cluser(account, password,headimage) VALUES ($1, $2,$3);"
 	stmt, err := Db.Prepare(sqlStatement)
 
 	if err != nil {
@@ -41,7 +41,7 @@ func Registered(data UserInfo) (bool, error) {
 		return false, err
 	}
 
-	_, err = stmt.Exec(data.Account,data.Password)
+	_, err = stmt.Exec(data.Account,data.Password,data.UserHead)
 	defer stmt.Close()
 
 	if err != nil {
