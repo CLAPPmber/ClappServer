@@ -19,7 +19,7 @@ func main() {
 
 	http.HandleFunc("/prarecord", PracticeServe.PrarecordHandle)
 	http.HandleFunc("/getallrec", PracticeServe.GetallrecHandle)
-	http.HandleFunc("/logn", UserServe.LoginHandle)
+	http.HandleFunc("/login", UserServe.LoginHandle)
 	http.HandleFunc("/register", UserServe.RegisteredHandle)
 	http.HandleFunc("/changepassword",UserServe.ChangePasswordHandle)
 
