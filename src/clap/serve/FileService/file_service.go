@@ -4,7 +4,12 @@ import (
 	. "clap/staging/TBLogger"
 	"clap/staging/feedback"
 	"fmt"
+	"github.com/nfnt/resize"
+	"image"
+	"image/jpeg"
+	"image/png"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -37,6 +42,7 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 		_=fb.SendData(400,"获取文件失败",nil)
 		return
 	}
+	defer file.Close()
 
 	//文件扩展名
 	fileext := filepath.Ext(handler.Filename)
@@ -58,10 +64,19 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
  	}
 
 	//新建文件
-	f, _ := os.OpenFile(dirPath+UserHeadImageSavePath+filename, os.O_CREATE|os.O_WRONLY, 0660)
+	f, _ := os.OpenFile(dirPath+UserHeadImageSavePath+filename, os.O_CREATE|os.O_RDWR, 0660)
 	//保存文件
 	_, err = io.Copy(f, file)
 	fmt.Println(dirPath+UserHeadImageSavePath+filename)
+	f.Close()
+	//压缩图片
+	if handler.Size>=1500000{
+		err = ResizeImage(dirPath+UserHeadImageSavePath+filename,fileext)
+		if err!=nil{
+			TbLogger.Error("压缩图片失败",err)
+		}
+	}
+
 	_=fb.SendData(200,"上传成功",dirPath+UserHeadImageSavePath+filename)
 	return
 }
@@ -80,4 +95,40 @@ func Mkdir(path string) (string,error) {
 	return dirPath,err
 }
 
+//压缩图片
+func ResizeImage(path string,fileext string)(err error){
+	// decode jpeg into image.Image
+	var img image.Image
+	file, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	if fileext == ".jpg"{
+		img, err = jpeg.Decode(file)
+		if err != nil {
+			return err
+		}
+	}else{
+		img, err = png.Decode(file)
+		if err != nil {
+			return err
+		}
+	}
+
+	defer  file.Close()
+
+	// resize to width 1000 using Lanczos resampling
+	// and preserve aspect ratio
+	m := resize.Resize(800, 0, img, resize.NearestNeighbor)
+
+	out, err := os.Create(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+
+	// write new image to file
+	png.Encode(out, m)
+	return nil
+}
