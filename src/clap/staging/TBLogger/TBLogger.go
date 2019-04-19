@@ -118,7 +118,7 @@ func NewTBLogger(logFunc bool, logFilePath bool, cacheNum int, periodTime int, d
 
 	TbLogger.LoggerFilePath = binPath + "/log/"
 
-	err = mkdirProDir(binPath + "/log")
+	err = MkdirProDir(binPath + "/log")
 	if err != nil {
 		panic("mkdirProDir failed " + err.Error())
 	}
@@ -327,7 +327,7 @@ func GetProDir() (string, error) {
 	return strings.Replace(path, "\\", "/", -1), nil
 }
 
-func mkdirProDir(logDir string) error {
+func MkdirProDir(logDir string) error {
 	//创建log目录在项目目录下
 	if _, err := os.Stat(logDir); os.IsNotExist(err) {
 		os.Mkdir(logDir, 0770)

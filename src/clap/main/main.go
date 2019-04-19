@@ -6,6 +6,7 @@ import (
 	"clap/serve/TestServe"
 	"clap/serve/UserServe"
 	_ "clap/staging/TBCache"
+	"clap/staging/TBLogger"
 	_ "clap/staging/db"
 	_ "clap/staging/memory"
 	"log"
@@ -35,9 +36,14 @@ func main() {
 
 	http.HandleFunc("/api/upload_file",FileService.UploadFileHandler)
 
+	dirPath,err := TBLogger.GetProDir()
+	if err!=nil{
+		TBLogger.TbLogger.Error("get dir path fail",err)
+	}
+	http.Handle("/api/get_image/", http.StripPrefix("/get_image/", http.FileServer(http.Dir(dirPath+FileService.UserHeadImageSavePath))))
 
 
-	err := http.ListenAndServe(":9090", nil)
+	err = http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

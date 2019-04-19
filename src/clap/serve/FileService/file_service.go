@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-const UserHeadImageSavePath = "./head_image/"
+const UserHeadImageSavePath = "/head_image/"
 
 func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 	//POST takes the uploaded file(s) and saves it to disk.
@@ -22,7 +22,7 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 		_=fb.SendData(400,"请求方法出错",nil)
 		return
 	}
-	//parse the multipart form in the request
+	//设置接收数据存放在内存所占用的最大空间
 	err := r.ParseMultipartForm(100000)
 	if err != nil {
 		TbLogger.Error("设置文件最多字节保存内存失败",err)
@@ -40,41 +40,44 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 
 	//文件扩展名
 	fileext := filepath.Ext(handler.Filename)
-	fmt.Println(fileext)
-	//用时间戳做文件名防止重名
-	filename := strconv.FormatInt(time.Now().Unix(), 10) + fileext
+	if fileext!=".jpg" && fileext!=".png"{
+		TbLogger.Error("文件类型错误",fileext)
+		_=fb.SendData(400,"文件类型错误",nil)
+		return
+	}
 
- 	dirExist,err := PathExists(UserHeadImageSavePath)
+	//用时间戳做文件名防止重名
+	filename := strconv.FormatInt(time.Now().Unix(), 10) +handler.Filename
+
+	//创建文件夹
+ 	dirPath,err := Mkdir(UserHeadImageSavePath)
  	if err!=nil{
  	    TbLogger.Error("判断文件夹是否存在错误",err)
  	    _=fb.SendData(400,"判断文件夹是否存在错误",nil)
  	    return
  	}
 
- 	if !dirExist{
- 		err := os.Mkdir(UserHeadImageSavePath,os.ModePerm)
- 		if err!=nil{
- 		    TbLogger.Error("创建文件夹失败",err)
- 		    _=fb.SendData(400,"创建文件夹失败",nil)
- 		    return
- 		}
-	}
-
 	//新建文件
-	f, _ := os.OpenFile(UserHeadImageSavePath+filename, os.O_CREATE|os.O_WRONLY, 0660)
+	f, _ := os.OpenFile(dirPath+UserHeadImageSavePath+filename, os.O_CREATE|os.O_WRONLY, 0660)
 	//保存文件
 	_, err = io.Copy(f, file)
-
+	fmt.Println(dirPath+UserHeadImageSavePath+filename)
+	_=fb.SendData(200,"上传成功",dirPath+UserHeadImageSavePath+filename)
+	return
 }
 
 
-func PathExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
+func Mkdir(path string) (string,error) {
+
+	dirPath ,err := GetProDir()
+	if err!=nil{
+		return dirPath,err
 	}
-	if os.IsNotExist(err) {
-		return false, nil
+	err = MkdirProDir(dirPath+path)
+	if err != nil {
+		return dirPath,err
 	}
-	return false, err
+	return dirPath,err
 }
+
+
