@@ -181,6 +181,11 @@ func GerAllRecord(w http.ResponseWriter,r *http.Request){
 	if total==nil{
 		err := db.Db.QueryRow(`SELECT COUNT(*) FROM clapp_test;`).Scan(&RetData.Total)
 		if err!=nil{
+			if err==sql.ErrNoRows{
+				TbLogger.Error("no record",err)
+				_=fb.SendData(400,"no record,if the params is err?",nil)
+				return
+			}
 		    TbLogger.Error("get total fail",err)
 		    _=fb.SendData(400,"get total fail",nil)
 		    return
@@ -191,6 +196,11 @@ func GerAllRecord(w http.ResponseWriter,r *http.Request){
 	}
 	err = db.Db.QueryRow(`SELECT COUNT(*) FROM pra_record WHERE  account = $1;`,account).Scan(&RetData.Complete)
 	if err!=nil{
+		if err==sql.ErrNoRows{
+			TbLogger.Error("no record",err)
+			_=fb.SendData(300,"no record,if the params is err?",nil)
+			return
+		}
 	    TbLogger.Error("get complete fail",err)
 	    _=fb.SendData(400,"get complete fail",nil)
 	    return
@@ -308,6 +318,11 @@ func GetUserTestRecord(w http.ResponseWriter,r *http.Request){
 				from pra_record WHERE account = $1 and question_num = $2 and chapter_num = $3 and flag = $4;`,
 				account,testNumInt,questionNumInt,flagInt).Scan(&qa.QuestionAns)
 	if err!=nil{
+		if err==sql.ErrNoRows{
+			TbLogger.Error("no record",err)
+			_=fb.SendData(300,"no record,if the params is err?",nil)
+			return
+		}
 	    TbLogger.Error("get question_ans from db fail",err)
 	    _=fb.SendData(400,"get question_ans from db fail",nil)
 	    return
@@ -336,6 +351,11 @@ func GetUserHeadImage(w http.ResponseWriter,r *http.Request){
  	var retUser UserInfo
 	err := db.Db.QueryRow(`SELECT headimage FROM	cluser WHERE  account = $1`,account).Scan(&retUser.UserHead)
 	if err!=nil{
+		if err==sql.ErrNoRows{
+			TbLogger.Error("no record",err)
+			_=fb.SendData(400,"no record,if the params is err?",nil)
+			return
+		}
 	    TbLogger.Error("get user head image fail",err)
 	    _=fb.SendData(400,"get user head image fail",nil)
 	    return

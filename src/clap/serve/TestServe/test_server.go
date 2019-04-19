@@ -2,6 +2,7 @@ package TestServe
 
 import (
 	"clap/staging/db"
+	"database/sql"
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
@@ -92,6 +93,11 @@ func GetChapterMsg(w http.ResponseWriter,r *http.Request){
 
 	row,err := db.Db.Query(`SELECT chapter_num,chapter_name,COUNT(chapter_num) from clapp_test WHERE flag = $1 group by chapter_num,chapter_name;`,flagInt)
 	if err!=nil{
+		if err==sql.ErrNoRows{
+			TbLogger.Error("no record",err)
+			_=fb.SendData(400,"no record,if the params is err?",nil)
+			return
+		}
 	    TbLogger.Error("get chapter_msg from db fail",err)
 	    _=fb.SendData(400,"get chapter_msg from db fail",nil)
 	    return
@@ -168,11 +174,14 @@ func GetQuestionMsg(w http.ResponseWriter,r *http.Request){
 		FROM clapp_test WHERE chapter_num = $1 and question_num = $2 and flag = $3;`,testNumInt,questionNumInt,flagInt).
 		Scan(&qn,&qa,&qb,&qc,&qd,&qans)
 	if err!=nil{
-		if err!=nil{
-		    TbLogger.Error("get test msg fail",err)
-		    _=fb.SendData(400,"get test msg fail because get from db fail",nil)
-		    return
+		if err==sql.ErrNoRows{
+			TbLogger.Error("no record",err)
+			_=fb.SendData(400,"no record,if the params is err?",nil)
+			return
 		}
+		TbLogger.Error("get test msg fail",err)
+		_=fb.SendData(400,"get test msg fail because get from db fail",nil)
+		return
 	}
 	QuestionMsg:= struct {
 		QuestionName string `json:"question_name"`
@@ -242,6 +251,11 @@ func PutDoingAns(w http.ResponseWriter,r *http.Request){
 	sqlInsert := `INSERT INTO pra_record(chapter_num, question_num, account, flag,question_ans) VALUES ($1,$2,$3,$4,$5)`
 	stmt,err := db.Db.Prepare(sqlInsert)
 	if err!=nil{
+		if err==sql.ErrNoRows{
+			TbLogger.Error("no record",err)
+			_=fb.SendData(400,"no record,if the params is err?",nil)
+			return
+		}
 	    TbLogger.Error("sql prepare fail",err)
 	    _=fb.SendData(400,"db fail",err)
 	    return
