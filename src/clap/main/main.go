@@ -1,6 +1,7 @@
 package main
 
 import (
+	"clap/serve/FileService"
 	"clap/serve/PracticeServe"
 	"clap/serve/TestServe"
 	"clap/serve/UserServe"
@@ -32,6 +33,7 @@ func main() {
 	http.HandleFunc("/api/get_user_head_image",UserServe.GetUserHeadImage)
 	http.HandleFunc("/api/update_user_head_image",UserServe.UpdateUesrHeadImage)
 
+	http.HandleFunc("/api/upload_file",FileService.UploadFileHandler)
 
 
 

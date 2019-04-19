@@ -316,7 +316,7 @@ func GetUserTestRecord(w http.ResponseWriter,r *http.Request){
 	err = db.Db.QueryRow(
 		`SELECT question_ans 
 				from pra_record WHERE account = $1 and question_num = $2 and chapter_num = $3 and flag = $4;`,
-				account,testNumInt,questionNumInt,flagInt).Scan(&qa.QuestionAns)
+				account,questionNumInt,testNumInt,flagInt).Scan(&qa.QuestionAns)
 	if err!=nil{
 		if err==sql.ErrNoRows{
 			TbLogger.Error("no record",err)
