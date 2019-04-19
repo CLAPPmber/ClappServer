@@ -157,7 +157,7 @@ func GerAllRecord(w http.ResponseWriter,r *http.Request){
 	}
 
 	var clu Cluser
-	err := db.Db.QueryRow("SELECT * from cluser where account = $1",
+	err := db.Db.QueryRow("SELECT account,password from cluser where account = $1",
 		account).Scan(&clu.Account, &clu.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {

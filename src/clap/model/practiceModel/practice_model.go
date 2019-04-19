@@ -24,7 +24,7 @@ func SubmitRecord(prarec Prarecord)(error){
 	}
 
 	var clu Cluser
-	err = tx.QueryRow("SELECT * from cluser where account = $1",
+	err = tx.QueryRow("SELECT account,password from cluser where account = $1",
 		prarec.Account).Scan(&clu.Account, &clu.Password)
 	if err != nil {
 		tx.Rollback()
@@ -81,7 +81,7 @@ func Getallrec(cluser Cluser,flag int)(error,[]Retprorec) {
 	}
 
 	var clu Cluser
-	err = tx.QueryRow("SELECT * from cluser where account = $1",
+	err = tx.QueryRow("SELECT account,password from cluser where account = $1",
 		cluser.Account).Scan(&clu.Account, &clu.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {

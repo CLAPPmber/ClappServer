@@ -8,7 +8,7 @@ import (
 )
 func SqlGets()([]Cluser,error){
 	var clusers []Cluser
-	rows, err := Db.Query("select * from cluser")
+	rows, err := Db.Query("select account,password from cluser")
 	defer rows.Close()
 	if err != nil {
 		TbLogger.Error(err)
@@ -29,7 +29,7 @@ func SqlGets()([]Cluser,error){
 
 func SqlGet()(Cluser,error){
 	var cluser Cluser
-	rows, err := Db.Query("select * from cluser")
+	rows, err := Db.Query("select account,password from cluser")
 	defer rows.Close()
 	if err != nil {
 		TbLogger.Error("Query err:",err)
