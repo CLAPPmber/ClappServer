@@ -40,7 +40,7 @@ func main() {
 	if err!=nil{
 		TBLogger.TbLogger.Error("get dir path fail",err)
 	}
-	http.Handle("/api/get_image/", http.StripPrefix("/get_image/", http.FileServer(http.Dir(dirPath+FileService.UserHeadImageSavePath))))
+	http.Handle("/api/get_image/", http.StripPrefix("/api/get_image/", http.FileServer(http.Dir(dirPath+FileService.UserHeadImageSavePath))))
 
 
 	err = http.ListenAndServe(":9090", nil)
