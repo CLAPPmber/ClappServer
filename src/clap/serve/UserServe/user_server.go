@@ -27,7 +27,7 @@ func LoginHandle(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-
+	var userRet UserInfo
 	fb := feedback.NewFeedBack(w)
 
 	result, err := ioutil.ReadAll(r.Body)
@@ -39,14 +39,14 @@ func LoginHandle(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(result, &userInfo)
 	if err != nil {
 		TbLogger.Error("读取数据失败", err)
-		fb.SendData(501, "读取数据失败", "null")
+		fb.SendData(501, "读取数据失败", userRet)
 		return
 	}
 
-	userRet, err := Login(userInfo)
+	userRet, err = Login(userInfo)
 	if err!=nil {
 		TbLogger.Error("登录失败", err)
-		fb.SendData(501, err.Error(), "null")
+		fb.SendData(501, err.Error(), userRet)
 		return
 	}
 
