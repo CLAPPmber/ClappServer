@@ -92,7 +92,7 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 		TbLogger.Error("更新对应头像url到用户信息失败",err)
 	}
 
-	_=fb.SendData(200,"上传成功",filename)
+	_=fb.SendData(200,"上传成功",HostName+filename)
 	return
 }
 
