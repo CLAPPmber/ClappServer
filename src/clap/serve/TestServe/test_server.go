@@ -70,9 +70,11 @@ func TestPostHandle(w http.ResponseWriter, r *http.Request) {
 
 //获取习题目录信息
 func GetChapterMsg(w http.ResponseWriter,r *http.Request){
+	var chapterMsg []ChapterMsg
+	chapterMsg = make([]ChapterMsg,0)
 	fb := feedback.NewFeedBack(w)
 	if r.Method != "GET" {
-		_=fb.SendData(400,"Request Method no Get",nil)
+		_=fb.SendData(400,"Request Method no Get",chapterMsg)
 		return
 	}
 
@@ -80,16 +82,15 @@ func GetChapterMsg(w http.ResponseWriter,r *http.Request){
 
 	flag := value.Get("flag")
 	if flag==""{
-		_=fb.SendData(400,"flag is empty",nil)
+		_=fb.SendData(400,"flag is empty",chapterMsg)
 		return
 	}
 	flagInt,err :=  strconv.Atoi(flag)
 	if err!=nil{
 		TbLogger.Error("flag to int fail",err)
-		_=fb.SendData(400,"get flag fail,it must be a int",nil)
+		_=fb.SendData(400,"get flag fail,it must be a int",chapterMsg)
 		return
 	}
-	var chapterMsg []ChapterMsg
 
 	row,err := db.Db.Query(`SELECT chapter_num,chapter_name,COUNT(chapter_num) from clapp_test WHERE flag = $1 group by chapter_num,chapter_name;`,flagInt)
 	if err!=nil{
@@ -99,7 +100,7 @@ func GetChapterMsg(w http.ResponseWriter,r *http.Request){
 			return
 		}
 	    TbLogger.Error("get chapter_msg from db fail",err)
-	    _=fb.SendData(400,"get chapter_msg from db fail",nil)
+	    _=fb.SendData(400,"get chapter_msg from db fail",chapterMsg)
 	    return
 	}
 	
@@ -112,7 +113,7 @@ func GetChapterMsg(w http.ResponseWriter,r *http.Request){
 			&cm.TestTotal)
 		if err!=nil{
 		    TbLogger.Error("scan data fail",err)
-		    _=fb.SendData(400,"get chapter msg from db fail",nil)
+		    _=fb.SendData(400,"get chapter msg from db fail",chapterMsg)
 		    return
 		}
 		chapterMsg = append(chapterMsg,cm)
