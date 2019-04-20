@@ -21,8 +21,8 @@ func Login(userInfo UserInfo) (UserInfo, error) {
 	err = stmt.QueryRow(userInfo.Account, userInfo.Password).Scan(&userRet.Account,&userRet.UserHead)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			TbLogger.Error("账号不存在", err)
-			return userRet,errors.New("账号不存在")
+			TbLogger.Error("账号或密码错误", err)
+			return userRet,errors.New("账号或密码错误")
 		} else {
 			TbLogger.Error("查询出错", err)
 			return userRet, errors.New("查询出错")
