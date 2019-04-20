@@ -400,3 +400,41 @@ func UpdateUesrHeadImage(w http.ResponseWriter,r *http.Request){
 	_=fb.SendData(200,"更新头像成功","")
 	return
 }
+
+func UserFeedBack(w http.ResponseWriter,r *http.Request){
+	fb := feedback.NewFeedBack(w)
+	if r.Method != "POST" {
+		_=fb.SendData(400,"Request Method no POST",nil)
+		return
+	}
+
+	BodyData, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		TbLogger.Error("get http request body data fail",err)
+		_=fb.SendData(400,"get http request body data fail",nil)
+		return
+	}
+
+	PostData := struct {
+		Account string  		`json:"account"`
+		Context string 			`json:"context"`
+	}{}
+
+	err = json.Unmarshal([]byte(BodyData), &PostData)
+	if err != nil {
+		TbLogger.Error("get postdata from json format fail",err)
+		_=fb.SendData(400,"get post_data fail,is json format err?",nil)
+		return
+	}
+
+	_,err= db.Db.Exec(`INSERT INTO user_feedback(account, context) VALUES ($1, $2);`,PostData.Account,PostData.Context)
+	if err!=nil{
+	    TbLogger.Error("保存用户反馈失败",err)
+	    _=fb.SendData(400,"保存用户反馈失败",nil)
+	    return
+	}
+
+	_=fb.SendData(200,"提交反馈成功","")
+	return
+
+}

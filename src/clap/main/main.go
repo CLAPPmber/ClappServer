@@ -34,7 +34,7 @@ func main() {
 	http.HandleFunc("/api/exersys/get_test_msg",LogApiAccess(TestServe.GetQuestionMsg))
 	http.HandleFunc("/api/get_user_head_image",LogApiAccess(UserServe.GetUserHeadImage))
 	http.HandleFunc("/api/update_user_head_image",LogApiAccess(UserServe.UpdateUesrHeadImage))
-
+	http.HandleFunc("/api/feedback",LogApiAccess(UserServe.UserFeedBack))
 	http.HandleFunc("/api/upload_file",LogApiAccess(FileService.UploadFileHandler))
 
 	dirPath,err := TBLogger.GetProDir()
