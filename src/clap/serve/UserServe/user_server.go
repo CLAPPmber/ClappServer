@@ -43,15 +43,15 @@ func LoginHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, msg := Login(userInfo)
-	if ok {
-		fb.SendData(200, "登录成功", "null")
-		return
-	} else {
+	userRet, err := Login(userInfo)
+	if err!=nil {
 		TbLogger.Error("登录失败", err)
-		fb.SendData(501, msg, "null")
+		fb.SendData(501, err.Error(), "null")
 		return
 	}
+
+	fb.SendData(200, "登录成功", userRet)
+	return
 }
 
 //注册
@@ -332,7 +332,7 @@ func GetUserTestRecord(w http.ResponseWriter,r *http.Request){
 	return
 }
 
-//todo 获取用户头像
+//todo 获取用户头像 废弃
 func GetUserHeadImage(w http.ResponseWriter,r *http.Request){
 	fb := feedback.NewFeedBack(w)
 
@@ -366,7 +366,7 @@ func GetUserHeadImage(w http.ResponseWriter,r *http.Request){
 
 }
 
-//todo 更新用户头像
+//todo 更新用户头像 废弃
 func UpdateUesrHeadImage(w http.ResponseWriter,r *http.Request){
 	fb := feedback.NewFeedBack(w)
 
