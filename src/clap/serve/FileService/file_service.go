@@ -2,6 +2,7 @@ package FileService
 
 import (
 	. "clap/staging/TBLogger"
+	"clap/staging/db"
 	"clap/staging/feedback"
 	"fmt"
 	"github.com/nfnt/resize"
@@ -18,6 +19,7 @@ import (
 )
 
 const UserHeadImageSavePath = "/head_image/"
+const HostName = "http://www.ish2b.cn/clapp/api/get_image/"
 
 func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 	//POST takes the uploaded file(s) and saves it to disk.
@@ -43,6 +45,14 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+
+	//获取用户账号
+	value := r.URL.Query()
+	account := value.Get("account")
+	if account==""{
+		_=fb.SendData(400,"account is empty",nil)
+		return
+	}
 
 	//文件扩展名
 	fileext := filepath.Ext(handler.Filename)
@@ -77,10 +87,14 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	_=fb.SendData(200,"上传成功",dirPath+UserHeadImageSavePath+filename)
+	_,err = db.Db.Exec(`UPDATE cluser set headimage = $1 WHERE  account = $2`,HostName+filename,account)
+	if err!=nil{
+		TbLogger.Error("更新对应头像url到用户信息失败",err)
+	}
+
+	_=fb.SendData(200,"上传成功",filename)
 	return
 }
-
 
 func Mkdir(path string) (string,error) {
 
@@ -120,7 +134,7 @@ func ResizeImage(path string,fileext string)(err error){
 
 	// resize to width 1000 using Lanczos resampling
 	// and preserve aspect ratio
-	m := resize.Resize(800, 0, img, resize.NearestNeighbor)
+	m := resize.Resize(100, 100, img, resize.NearestNeighbor)
 
 	out, err := os.Create(path)
 	if err != nil {
