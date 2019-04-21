@@ -7,8 +7,13 @@ import (
 
 func LogApiAccess(httpHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		RemoteAddr := r.Header.Get("X-Real-IP")
+		if RemoteAddr == "" {
+			RemoteAddr = r.RemoteAddr
+		}
 		TBLogger.TbLogger.Info("ApiAccess:",
-			"host:", r.RemoteAddr,
+			"RemoteAddr:", RemoteAddr,
 			"AccessApi:", r.URL.Path,
 			"Method", r.Method,
 		)
@@ -21,8 +26,12 @@ type DownFileAccessMid struct {
 }
 
 func (dfm DownFileAccessMid) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	RemoteAddr := r.Header.Get("X-Real-IP")
+	if RemoteAddr == "" {
+		RemoteAddr = r.RemoteAddr
+	}
 	TBLogger.TbLogger.Info("ApiAccess",
-		"host:", r.RemoteAddr,
+		"RemoteAddr:", RemoteAddr,
 		"AccessApi:", r.URL.Path,
 		"Method", r.Method,
 	)
