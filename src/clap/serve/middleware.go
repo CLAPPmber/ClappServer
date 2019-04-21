@@ -8,9 +8,9 @@ import (
 func LogApiAccess(httpHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		TBLogger.TbLogger.Info("ApiAccess:",
-			"host:", r.Host,
+			"host:", r.RemoteAddr,
 			"AccessApi:", r.URL.Path,
-			"RemoteAddr", r.RemoteAddr,
+			"Method", r.Method,
 		)
 		httpHandler(w, r)
 	}
@@ -22,7 +22,7 @@ type DownFileAccessMid struct {
 
 func (dfm DownFileAccessMid) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	TBLogger.TbLogger.Info("ApiAccess",
-		"host:", r.Host,
+		"host:", r.RemoteAddr,
 		"AccessApi:", r.URL.Path,
 		"Method", r.Method,
 	)
